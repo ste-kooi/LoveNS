@@ -6,12 +6,18 @@ class Traject:
 
 
     def make_traject(self) -> None:
-    """ Makes a traject """
+        """ 
+        Makes a traject 
+        
+        """
         pass
 
 
     def calc_duration(self) -> bool:
-    """ Calculates the time that a traject takes. Returns true if the traject is below the max time, else false. """
+        """ 
+        Calculates the time that a traject takes. Returns true if the traject is below the max time, else false. 
+        
+        """
 
         #TODO
         traject_duraction = 0
@@ -21,5 +27,8 @@ class Traject:
 
 
     def comp_traject(self) -> bool:
-    """ Compares valiable trajects to determine best option."""
+        """ 
+        Compares valiable trajects to determine best option
+    
+        ."""
         pass
