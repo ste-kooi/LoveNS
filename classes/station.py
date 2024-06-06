@@ -1,10 +1,13 @@
+from typing import List
+
 class Station:
     
     def __init__(self, name: str, x: int, y: int) -> None:
         self.name = name
         self.location = (x, y)
-        self.connections: list[Station] = []
+        self.connections: List[(Station, int)] = []
 
-    def make_connections(self) -> None:
+    def set_connection(self, station, duration: int) -> None:
+        self.connections.append(station, duration)
         pass
 
