@@ -11,3 +11,5 @@ class Station:
         self.connections.append(station, duration)
         pass
 
+    def __repr__(self) -> str:
+        return f'{self.name}'
