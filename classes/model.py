@@ -50,6 +50,23 @@ class Model:
                 self.stations[stationname1].set_connection(Connection(stationname1, stationname2, time))
                 self.stations[stationname2].set_connection(Connection(stationname2, stationname1, time))
 
+    def calculate_score(self) -> float:
+        """
+        This function calculates a K score from the model following the formula:
+
+        K = p * 1000 - (T * 100 + Min)
+
+        K:   quality of route planning
+        p:   fraction of covered connections
+        T:   number of routes
+        Min: total minutes of routes
+
+        """
+        T = len(self.routes)
+        p = self.coverage()
+        Min = self.total_time()
+        return p * 1000 - (T * 100 + Min)
+    
     def total_time(self):
         totaltime = 0
         for route in self.routes:
