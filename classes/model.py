@@ -1,6 +1,7 @@
 from station import Station
 from connection import Connection
-from traject import Traject
+from route import Route
+import random
 
 class Model:
     
@@ -9,7 +10,8 @@ class Model:
         self.connections: set[Connection] = set()
         self.load_stations()
         self.load_connections()
-        # self.routes: set[Routes] = set()
+
+        self.routes: set[Route] = set()
 
     def load_stations(self):
         # open file and read every row
@@ -73,10 +75,48 @@ class Model:
             totaltime += route.duration
         return totaltime
     
-    def make_route(self):
-        # TODO make algorithm
-        pass
+
     
+    def make_routes(self) -> None:
+        """ 
+        Makes a route 
+        
+        """
+
+        # get a sation class
+
+        # put that station in a list
+
+        # check the connections from that station and go to one of those stations
+
+        # get that station class
+
+        # put that station in the list
+
+        # repeat
+    
+        current_station = random.choice(self.stations)
+        duration = 0
+
+        while duration < 500:
+            self.routes.append(current_station)
+            current_station = random.choice(current_station.connections)
+            duration += current_station.connections.time
+            print(self.routes)
+
+
+            if duration > 120:
+                self.route = self.routes[:-1]
+                return True
+ 
+        print("test")
+
+
+        __name__ == '__main__'
+
+        route = make_routes()
+
+        print(route)
     
     
 
