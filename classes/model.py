@@ -7,6 +7,15 @@ import random
 class Model:
 
     def __init__(self, mapname) -> None:
+        """
+        Constructs a new Model object by loading stations and connections from CSV files.
+
+        Parameters
+        ----------
+        mapname : str
+            The name of the map used to locate the CSV files.
+        """
+
         self.stations: dict[Station] = {}
         self.connections: dict[Connection] = {}
         self.load_stations(mapname)
@@ -15,6 +24,15 @@ class Model:
         self.routes: dict[int] = {}
 
     def load_stations(self, mapname):
+        """
+        Loads stations from a CSV file into the model.
+
+        Parameters
+        ----------
+        mapname : str
+            The name of the map used to locate the CSV file.
+        """
+
         # open file and read every row
         with open(f"source/Stations{mapname}.csv") as stationfile:
             while True:
@@ -23,14 +41,22 @@ class Model:
                     continue
                 
                 if len(stationdata) == 1:
-                    return False
-                    break
+                    return
 
                 # add every station to self.stations
                                                              # naam            x                     y
                 self.stations[stationdata[0]] = ((Station(stationdata[0], float(stationdata[2]), float(stationdata[1]))))
 
     def load_connections(self, mapname):
+        """
+        Loads connections from a CSV file into the model.
+
+        Parameters
+        ----------
+        mapname : str
+            The name of the map used to locate the CSV file.
+        """
+
         # open file
         connection_id = 0
         with open(f"source/Connecties{mapname}.csv") as connectionfile:
@@ -57,11 +83,16 @@ class Model:
                 connection_id += 1
 
 
-    def add_route(self, start_station, route_id: int):
+    def add_route(self, start_station: Station, route_id: int):
         """
-        This function adds a route to the model. Needs a starting station and route id
+        This function adds a route to the model. 
 
-        
+        Parameters
+        ----------
+        start_station : Station
+            The starting station of the route.
+        route_id : int
+            The unique identifier for the route.
         """
         route = Route(route_id)
         route.add_station(start_station)
@@ -71,14 +102,24 @@ class Model:
                 
     def get_coverage(self):
         """
-        returns how much of the connections are covered. 
-        Kan aan de hand van connections_id, zo kom je niet in de knoop met de richting van de connectie
+        Calculates the fraction of covered connections.
+
+        Returns
+        -------
+        float
+            The fraction of connections covered by the routes.
         """
         #TODO
 
         return .9
         
     def total_time(self):
+        """
+        Calculates the total time of all routes.
+
+        Returns:
+            int: The total duration of all routes.
+        """
         duration = 0
         for route in self.routes.values():
             duration += route.duration
@@ -96,6 +137,9 @@ class Model:
         T:   number of routes
         Min: total minutes of routes
 
+        Returns:
+            float: K score of the model
+
         """
         T = len(self.routes)
         p = self.get_coverage()
@@ -105,6 +149,11 @@ class Model:
         # get a sation class
 
     def make_routes(self):
+        """
+        Generates random routes for the model, ensuring each route does not exceed 120 minutes.
+
+        -- dit gaat uiteindelijk naar algorithms --
+        """
         for train_id in range(7):
             first_station_random = random.randint(0, 28)
             current_station = random.choice(list(self.stations.values()))

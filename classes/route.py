@@ -3,7 +3,23 @@ from station import Station
 import random
 
 class Route:
-    
+    """
+    A class to represent a route for a train.
+
+    ...
+
+    Attributes
+    ----------
+    stations : list
+        A list the stations along the route.
+    interconnections : list
+        A list of the connections between stations.
+    duration : int
+        The total duration of the route in minutes.
+    train_id : int
+        The unique identifier for the train route
+    """
+        
     def __init__(self, train_id: int) -> None:
         self.stations: list[Station] = []
         self.interconnections: list[Connection] = []
