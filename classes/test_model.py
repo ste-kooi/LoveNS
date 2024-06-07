@@ -32,3 +32,10 @@ def test_model():
     model.routes[3].add_station(model.stations['Amsterdam Zuid'])
 
     return model
+
+if __name__ == '__main__':
+    model = test_model()
+    # print(model.stations['Amsterdam Amstel'].connections.keys())
+    # print(model.stations['Amsterdam Zuid'].connections.keys())
+    print(model.connections)
+

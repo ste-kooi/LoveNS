@@ -7,12 +7,12 @@ import random
 class Model:
 
     def __init__(self, mapname) -> None:
-        self.stations: dict[str: Station] = {}
-        self.connections: dict[int: Connection] = {}
+        self.stations: dict[Station] = {}
+        self.connections: dict[Connection] = {}
         self.load_stations(mapname)
         self.load_connections(mapname)
 
-        self.routes: dict[int: Route] = {}
+        self.routes: dict[int] = {}
 
     def load_stations(self, mapname):
         # open file and read every row
@@ -41,20 +41,21 @@ class Model:
                 
                 if len(connectiondata) == 1:
                     return False
-                    break
 
                 stationname1 = connectiondata[0]
                 stationname2 = connectiondata[1]
                 time = int(connectiondata[2])
 
                 # add every connection to self.connections
-                self.connections[connection_id] = (Connection(self.stations[stationname1], self.stations[stationname2], time, connection_id))
+                connection = Connection(self.stations[stationname1], self.stations[stationname2], time, connection_id)
+                self.connections[connection_id] = (connection)
             
                 # add every connection to self.stations(station naam)
-                self.stations[stationname1].set_connection(Connection(self.stations[stationname1], self.stations[stationname2], time, connection_id))
-                self.stations[stationname2].set_connection(Connection(self.stations[stationname2], self.stations[stationname1], time, connection_id))
+                self.stations[stationname1].set_connection(connection)
+                self.stations[stationname2].set_connection(connection)
                 
                 connection_id += 1
+
 
     def add_route(self, start_station, route_id: int):
         """
@@ -115,22 +116,11 @@ class Model:
                 
                 self.routes[train_id].add_interconnection(new_connection)
                 self.routes[train_id].add_station(current_station)
-    
+
+
 
 if __name__ == '__main__':
-    test = Model("Holland")
-    # print(test.stations)
-    # print(test.connections)
-    # test.make_routes()
-    # print(test.routes)
-    # print(test.total_time()/7)
-    test.add_route(test.stations['Beverwijk'], 1)
-    test.routes[1].add_station(test.stations['Castricum'])
-    test.routes[1].add_station(test.stations['Alkmaar'])
-    test.routes[1].add_station(test.stations['Hoorn'])
-    test.routes[1].add_station(test.stations['Zaandam'])
-    print(test.routes)
-    
+    pass    
     
 
     

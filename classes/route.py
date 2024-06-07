@@ -5,8 +5,8 @@ import random
 class Route:
     
     def __init__(self, train_id: int) -> None:
-        self.stations: list[Stations] = []
-        self.interconnections: list[Connections] = []
+        self.stations: list[Station] = []
+        self.interconnections: list[Connection] = []
 
         self.duration: int = 0
         self.train_id = train_id
@@ -16,7 +16,18 @@ class Route:
         self.refresh_duration()
         
     def add_station(self, station: Station):
+        """
+        Adds a station to the route
+        
+        """
         self.stations.append(station)
+
+    def remove_station(self, station: Station):
+        """
+        Removes a station from the route
+        
+        """
+        self.stations.remove(station)
     
     def refresh_duration(self):
         duration = 0
