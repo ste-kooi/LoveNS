@@ -5,6 +5,7 @@ import os
 # Add the path to the classes folder to sys.path
 sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '../classes')))
 from model import Model
+from test_model import test_model
 
 def output(model: Model):
     """
@@ -36,33 +37,6 @@ def output(model: Model):
 
     print(f"Data has been written to {filename}")
 
-def test_output():
-    test = Model("Holland")
-    # Route 1
-    test.add_route(test.stations['Beverwijk'], 1)
-    test.routes[1].add_station(test.stations['Castricum'])
-    test.routes[1].add_station(test.stations['Alkmaar'])
-    test.routes[1].add_station(test.stations['Hoorn'])
-    test.routes[1].add_station(test.stations['Zaandam'])
-
-    # Route 2
-    test.add_route(test.stations['Amsterdam Sloterdijk'], 2)
-    test.routes[2].add_station(test.stations['Amsterdam Centraal'])
-    test.routes[2].add_station(test.stations['Amsterdam Amstel'])
-    test.routes[2].add_station(test.stations['Amsterdam Zuid'])
-    test.routes[2].add_station(test.stations['Schiphol Airport'])
-
-    # Route 3
-    test.add_route(test.stations['Rotterdam Alexander'], 3)
-    test.routes[3].add_station(test.stations['Gouda'])
-    test.routes[3].add_station(test.stations['Alphen a/d Rijn'])
-    test.routes[3].add_station(test.stations['Leiden Centraal'])
-    test.routes[3].add_station(test.stations['Schiphol Airport'])
-    test.routes[3].add_station(test.stations['Amsterdam Zuid'])
-
-
-
-    output(test)
 
 if __name__ == "__main__":
-    test_output()
+    output(test_model())
