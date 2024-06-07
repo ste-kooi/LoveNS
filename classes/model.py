@@ -155,18 +155,17 @@ class Model:
         -- dit gaat uiteindelijk naar algorithms --
         """
         for train_id in range(7):
-            first_station_random = random.randint(0, 28)
-            current_station = random.choice(list(self.stations.values()))
-            self.routes[train_id] = Route(current_station, train_id)
+            random_station_name = random.choice(list(self.stations.keys()))
+            current_station = self.stations[random_station_name]
+            self.add_route(current_station, train_id)
             
             while self.routes[train_id].duration < 120:
-                new_connection = random.choice(list(current_station.connections.values()))
+                random_connection = random.choice(list(current_station.connections.keys()))
+                new_connection = current_station.connections[random_connection]
                 current_station = new_connection.station2
-                
+                    
                 self.routes[train_id].add_interconnection(new_connection)
                 self.routes[train_id].add_station(current_station)
-
-
 
 if __name__ == '__main__':
     pass    
