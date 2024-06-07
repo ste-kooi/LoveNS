@@ -4,14 +4,14 @@ import random
 
 class Route:
     
-    def __init__(self, station: Station, train_id: int) -> None:
-        self.stations: list[Stations] = [station]
+    def __init__(self, train_id: int) -> None:
+        self.stations: list[Stations] = []
         self.interconnections: list[Connections] = []
 
         self.duration: int = 0
-        self.train_id: int = train_id
+        self.train_id = train_id
         
-    def add_interconnection(self, connection: Connection):
+    def add_interconnection(self, connection: Connection): 
         self.interconnections.append(connection)
         self.refresh_duration()
         
@@ -38,6 +38,6 @@ class Route:
         pass
     
     def __repr__(self):
-        if len(self.stations) > 1:
-            return f"{self.stations[0]} - {self.stations[-1]}"
+        if len(self.stations) >= 1:
+            return f"{self.stations[0]} - {self.stations[-1]} no. Stations: {len(self.stations)}"
         return None

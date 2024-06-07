@@ -16,7 +16,7 @@ class Model:
 
     def load_stations(self, mapname):
         # open file and read every row
-        with open(f"../source/Stations{mapname}.csv") as stationfile:
+        with open(f"source/Stations{mapname}.csv") as stationfile:
             while True:
                 stationdata = stationfile.readline().strip().split(",")
                 if stationdata[0] == "station":
@@ -33,7 +33,7 @@ class Model:
     def load_connections(self, mapname):
         # open file
         connection_id = 0
-        with open(f"../source/Connecties{mapname}.csv") as connectionfile:
+        with open(f"source/Connecties{mapname}.csv") as connectionfile:
             while True:
                 connectiondata = connectionfile.readline().strip().split(",")
                 if connectiondata[0] == "station1":
@@ -56,25 +56,26 @@ class Model:
                 
                 connection_id += 1
 
-    def make_routes(self):
-        for train_id in range(7):
-            first_station_random = random.randint(0, 28)
-            current_station = random.choice(list(self.stations.values()))
-            self.routes[train_id] = Route(current_station, train_id)
-            
-            while self.routes[train_id].duration < 120:
-                new_connection = random.choice(list(current_station.connections.values()))
-                current_station = new_connection.station2
-                
-                self.routes[train_id].add_interconnection(new_connection)
-                self.routes[train_id].add_station(current_station)
+    def add_route(self, start_station, route_id: int):
+        """
+        This function adds a route to the model. Needs a starting station and route id
+
+        
+        """
+        route = Route(route_id)
+        route.add_station(start_station)
+        self.routes[route_id] = route
+
+
                 
     def get_coverage(self):
         """
         returns how much of the connections are covered. 
         Kan aan de hand van connections_id, zo kom je niet in de knoop met de richting van de connectie
         """
-        pass
+        #TODO
+
+        return .9
         
     def total_time(self):
         duration = 0
@@ -96,20 +97,39 @@ class Model:
 
         """
         T = len(self.routes)
-        p = self.coverage()
+        p = self.get_coverage()
         Min = self.total_time()
         return p * 1000 - (T * 100 + Min)
     
         # get a sation class
 
+    def make_routes(self):
+        for train_id in range(7):
+            first_station_random = random.randint(0, 28)
+            current_station = random.choice(list(self.stations.values()))
+            self.routes[train_id] = Route(current_station, train_id)
+            
+            while self.routes[train_id].duration < 120:
+                new_connection = random.choice(list(current_station.connections.values()))
+                current_station = new_connection.station2
+                
+                self.routes[train_id].add_interconnection(new_connection)
+                self.routes[train_id].add_station(current_station)
+    
 
 if __name__ == '__main__':
     test = Model("Holland")
-    print(test.stations)
-    print(test.connections)
-    test.make_routes()
+    # print(test.stations)
+    # print(test.connections)
+    # test.make_routes()
+    # print(test.routes)
+    # print(test.total_time()/7)
+    test.add_route(test.stations['Beverwijk'], 1)
+    test.routes[1].add_station(test.stations['Castricum'])
+    test.routes[1].add_station(test.stations['Alkmaar'])
+    test.routes[1].add_station(test.stations['Hoorn'])
+    test.routes[1].add_station(test.stations['Zaandam'])
     print(test.routes)
-    print(test.total_time()/7)
     
     
 
