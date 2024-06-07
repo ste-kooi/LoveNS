@@ -37,5 +37,5 @@ if __name__ == '__main__':
     model = test_model()
     # print(model.stations['Amsterdam Amstel'].connections.keys())
     # print(model.stations['Amsterdam Zuid'].connections.keys())
-    print(model.connections)
+    print(model.routes.keys())
 

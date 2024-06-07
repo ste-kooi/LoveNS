@@ -15,13 +15,11 @@ class Model:
         mapname : str
             The name of the map used to locate the CSV files.
         """
-
         self.stations: dict[Station] = {}
         self.connections: dict[Connection] = {}
+        self.routes: dict[int] = {}
         self.load_stations(mapname)
         self.load_connections(mapname)
-
-        self.routes: dict[int] = {}
 
     def load_stations(self, mapname):
         """
@@ -49,7 +47,7 @@ class Model:
 
     def load_connections(self, mapname):
         """
-        Loads connections from a CSV file into the model.
+        Loads connections from a CSV file into the model and into the stations.
 
         Parameters
         ----------
@@ -98,6 +96,16 @@ class Model:
         route.add_station(start_station)
         self.routes[route_id] = route
 
+    def remove_route(self, route_id: int):
+        """
+        This function removes a route from the model. 
+
+        Parameters
+        ---------
+        route_id : int
+            The unique identifier for the route.
+        """
+        del self.routes[route_id]
 
                 
     def get_coverage(self):
@@ -168,8 +176,7 @@ class Model:
                 self.routes[train_id].add_station(current_station)
 
 if __name__ == '__main__':
-    pass    
-    
+    pass
 
     
     
