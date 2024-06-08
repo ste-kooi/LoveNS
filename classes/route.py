@@ -21,21 +21,30 @@ class Route:
     """
         
     def __init__(self, train_id: int) -> None:
+        self.train_id = train_id
         self.stations: list[Station] = []
         self.interconnections: list[Connection] = []
-
         self.duration: int = 0
-        self.train_id = train_id
-        
-    def add_interconnection(self, connection: Connection): 
-        self.interconnections.append(connection)
-        self.refresh_duration()
         
     def add_station(self, station: Station):
         """
-        Adds a station to the route
-        
+        Adds a station and the connection to the route.        
         """
+
+            # Check if the route already contains stations.
+        if self.stations:
+            # Get the last station in the current route.
+            last_station = self.stations[-1]
+            # Find the connection from the last station to the new station.
+            connection = last_station.connections.get(station.name)
+            # Check if a valid connection is found.
+            if connection:
+                # Append the connection to the interconnections list.
+                self.interconnections.append(connection)
+                # Update the total duration of the route.
+                self.duration += connection.time
+
+        # Add the new station to the list of stations in the route.
         self.stations.append(station)
 
     def remove_station(self, station: Station):
@@ -65,6 +74,5 @@ class Route:
         pass
     
     def __repr__(self):
-        if len(self.stations) >= 1:
-            return f"{self.stations[0]} - {self.stations[-1]} no. Stations: {len(self.stations)}"
-        return None
+        station_names = ' -> '.join([station.name for station in self.stations])
+        return f'Route {self.train_id}: {station_names} (Duration: {self.duration} minutes)'
