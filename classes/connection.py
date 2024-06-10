@@ -22,5 +22,8 @@ class Connection:
         self.time: int = duration
         self.connection_id = connection_id
 
+    def get_id(self):
+        return self.connection_id
+    
     def  __repr__(self) -> str:
         return f'{self.station1} - {self.station2}'
