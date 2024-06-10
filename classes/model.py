@@ -152,7 +152,8 @@ class Model:
         T = len(self.routes)
         p = self.get_coverage()
         Min = self.total_time()
-        return p * 1000 - (T * 100 + Min)
+        return p * 10000 - (T * 100 + Min)
+
     
         # get a sation class
 
@@ -182,7 +183,9 @@ class Model:
                 self.routes[train_id].add_station(current_station)
 
 if __name__ == '__main__':
-    pass
+    model = Model("Holland")
+    model.make_routes()
+    model.calculate_score()
 
     
     
