@@ -25,7 +25,21 @@ class Route:
         self.stations: list[Station] = []
         self.interconnections: list[Connection] = []
         self.duration: int = 0
+
+    def check_station(self, station: Station):
+        """
+        Checks if the connecting station and current station are the same.
+        """
+
+        connection = Connection()
         
+        last_station = self.stations[-1]
+        if last_station == connection.station1:
+            return False
+            print ("test")
+        else:
+            return True
+
     def add_station(self, station: Station):
         """
         Adds a station and the connection to the route.        

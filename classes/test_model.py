@@ -33,6 +33,34 @@ def test_model():
 
     return model
 
+def test_model_nl():
+    """
+    This function returns a model with the stations from the test output file
+    
+    """
+    model = Model('Nederland')
+
+    # Route 1
+    model.add_route(model.stations['Alkmaar'], 1)
+    model.routes[1].add_station(model.stations['Hoorn'])
+    model.routes[1].add_station(model.stations['Zaandam'])
+    model.routes[1].add_station(model.stations['Amsterdam Sloterdijk'])
+    model.routes[1].add_station(model.stations['Haarlem'])
+
+    # Route 2
+    model.add_route(model.stations['Den Haag Centraal'], 2)
+    model.routes[2].add_station(model.stations['Gouda'])
+    model.routes[2].add_station(model.stations['Alphen a/d Rijn'])
+    model.routes[2].add_station(model.stations['Leiden Centraal'])
+    model.routes[2].add_station(model.stations['Schiphol Airport'])
+
+    # Route 3
+    model.add_route(model.stations['Maastricht'], 3)
+    model.routes[3].add_station(model.stations['Sittard'])
+
+    return model
+
+
 if __name__ == '__main__':
     model = test_model()
     # print(model.stations['Amsterdam Amstel'].connections.keys())

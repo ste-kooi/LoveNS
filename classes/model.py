@@ -21,6 +21,17 @@ class Model:
         self.load_stations(mapname)
         self.load_connections(mapname)
 
+    def __repr__(self):
+        """
+        Only for printing DELETE LATER.
+
+        """
+        s=""
+        s+='self.stations:'+str(self.stations)+'\n'
+        s+='self.connections:'+str(self.connections)+'\n'
+        s += 'self.routes:'+str(self.routes)+'\n'
+        return s
+
     def load_stations(self, mapname):
         """
         Loads stations from a CSV file into the model.
@@ -68,7 +79,7 @@ class Model:
 
                 stationname1 = connectiondata[0]
                 stationname2 = connectiondata[1]
-                time = int(connectiondata[2])
+                time = float(connectiondata[2])
 
                 # add every connection to self.connections
                 connection = Connection(self.stations[stationname1], self.stations[stationname2], time, connection_id)
@@ -152,6 +163,7 @@ class Model:
         T = len(self.routes)
         p = self.get_coverage()
         Min = self.total_time()
+        print(p * 10000 - (T * 100 + Min))
         return p * 10000 - (T * 100 + Min)
 
     
@@ -164,12 +176,13 @@ class Model:
         -- dit gaat uiteindelijk naar algorithms --
         """
         for train_id in range(1,8):
+            
 
             # pick a random station
             random_station_name = random.choice(list(self.stations.keys()))
             current_station = self.stations[random_station_name]
             self.add_route(current_station, train_id)
-            
+
             while self.routes[train_id].duration < 120:
                 if len(current_station.connections) > 1:
                     random_connection = random.choice(list(current_station.connections.keys()))
@@ -182,8 +195,21 @@ class Model:
                     
                 self.routes[train_id].add_station(current_station)
 
+                #if self.routes[train_id].duration > 120:
+                    #self.stations.popitem()
+                    #break
+
+            print(self.routes)
+
+        
+
+        
+
+
+        
+
 if __name__ == '__main__':
-    model = Model("Holland")
+    model = Model("Nederland")
     model.make_routes()
     model.calculate_score()
 

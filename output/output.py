@@ -6,6 +6,8 @@ import os
 sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '../classes')))
 from model import Model
 from test_model import test_model
+from test_model import test_model_nl
+
 
 def output(model: Model):
     """
@@ -39,4 +41,4 @@ def output(model: Model):
 
 
 if __name__ == "__main__":
-    output(test_model())
+    output(test_model_nl())
