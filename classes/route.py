@@ -26,16 +26,19 @@ class Route:
         self.interconnections: list[Connection] = []
         self.duration: int = 0
 
-    def check_connection(self, connection: Connection):
+    def check_station(self, station: Station):
         """
-        Checks if the chosen connection and the used interconnections are the same.
+        Checks if the connecting station and current station are the same.
         """
-        chosen_interconnection = interconnection.get_id()
-        for interconnection in self.interconnections:
-            used_interconnection = interconnection.get_connection()
-            if chosen_connection == used_interconnection:
-                return False
-        return True
+
+        connection = Connection()
+        
+        last_station = self.stations[-1]
+        if last_station == connection.station1:
+            return False
+            print ("test")
+        else:
+            return True
 
     def add_station(self, station: Station):
         """
