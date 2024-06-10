@@ -179,48 +179,6 @@ class Model:
         p = self.get_coverage()
         Min = self.total_time()
         return p * 10000 - (T * 100 + Min)
-    
-
-    def random_routes(self, amount):
-        """
-        Generates random routes for the model, ensuring each route does not exceed 120 minutes.
-
-        Parameters
-        ---------
-        amount : int
-            The number of routes to create.
-
-        -- dit gaat uiteindelijk naar algorithms --
-        """
-        for train_id in range(1, amount + 1):
-
-            # pick random starting station
-            current_station = self.stations[random.choice(list(self.stations))]
-
-            # add new route from that station
-            self.add_route(current_station, train_id)
-
-            # pick a station from the connections list
-            while self.routes[train_id].duration < 120:
-                # get stations from connections and filter out visited stations
-                possible_connections = [station for station in current_station.connections 
-                                        if self.stations[station] not in self.routes[train_id].stations]
-                if not possible_connections:
-                    break    
-                
-                # pick next station from the connections
-                next_station = random.choice(possible_connections)
-                next_connection = current_station.connections[next_station]
-
-                # if addition of station to route takes to long, break
-                if self.routes[train_id].duration + next_connection.time > 120:
-                    break
-
-                # add station to route
-                current_station = self.stations[next_station]
-                self.routes[train_id].add_station(current_station)
-
-
 
         
 if __name__ == '__main__':
