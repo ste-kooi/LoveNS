@@ -178,55 +178,74 @@ class Model:
         T = len(self.routes)
         p = self.get_coverage()
         Min = self.total_time()
-        print(p * 10000 - (T * 100 + Min))
         return p * 10000 - (T * 100 + Min)
-
     
-        # get a sation class
 
-    def make_routes(self):
+    def random_routes(self, amount):
         """
         Generates random routes for the model, ensuring each route does not exceed 120 minutes.
 
+        Parameters
+        ---------
+        amount : int
+            The number of routes to create.
+
         -- dit gaat uiteindelijk naar algorithms --
         """
-        for train_id in range(1,8):
-            
+        for train_id in range(1, amount + 1):
 
-            # pick a random station
-            random_station_name = random.choice(list(self.stations.keys()))
-            current_station = self.stations[random_station_name]
+            # pick random starting station
+            current_station = self.stations[random.choice(list(self.stations))]
+
+            # add new route from that station
             self.add_route(current_station, train_id)
 
+            # pick a station from the connections list
             while self.routes[train_id].duration < 120:
-                if len(current_station.connections) > 1:
-                    random_connection = random.choice(list(current_station.connections.keys()))
-                else:
-                    random_connection = next(iter(current_station.connections))
+                # get stations from connections and filter out visited stations
+                possible_connections = [station for station in current_station.connections 
+                                        if self.stations[station] not in self.routes[train_id].stations]
+                if not possible_connections:
+                    break    
+                
+                # pick next station from the connections
+                next_station = random.choice(possible_connections)
+                next_connection = current_station.connections[next_station]
 
-                new_connection = current_station.connections[random_connection]
-                self.routes[train_id].add_station(new_connection.station1)
-                current_station = new_connection.station2
-                    
+                # if addition of station to route takes to long, break
+                if self.routes[train_id].duration + next_connection.time > 120:
+                    break
+
+                # add station to route
+                current_station = self.stations[next_station]
                 self.routes[train_id].add_station(current_station)
 
-                #if self.routes[train_id].duration > 120:
-                    #self.stations.popitem()
-                    #break
-
-            print(self.routes)
-
-        
-
-        
 
 
         
-
 if __name__ == '__main__':
-    model = Model("Nederland")
-    model.make_routes()
-    model.calculate_score()
+    model = Model("Holland")
+    train_id = 1
+    current_station = model.stations[random.choice(list(model.stations))]
+    # add new route from that station
+    # print(type(current_station))
+    model.add_route(current_station, train_id)
+    possible_connections = [station for station in current_station.connections 
+                        if station not in model.routes[train_id].stations]
+    print(current_station)
+    print(type(possible_connections[1]))
+    next_connection = current_station.connections[random.choice(possible_connections)]
+    print(next_connection)
+    print(type(next_connection))
+
+
+    # next_connection = random.choice(possible_connections)
+
+
+
+    # model.routes[1].add_station(model.stations['Castricum'])
+    # print(random.choice(list(model.routes[1].stations[1].connections.keys())))
+
 
     
     
