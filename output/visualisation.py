@@ -22,7 +22,7 @@ def visualise(model: Model):
         x, y = station.location
         ax.plot(x, y, 'o')
         ax.annotate(station.name, (x, y), textcoords="offset points", xytext=(5,5), ha='center')
-    
+              
     # plot routes
 
     # create color cycle
@@ -45,4 +45,6 @@ def visualise(model: Model):
     
 
 if __name__ == '__main__':
-    visualise(test_model())
+    mod = Model('Holland')
+    mod.make_routes()
+    visualise(mod)

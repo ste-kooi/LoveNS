@@ -41,4 +41,7 @@ def output(model: Model):
 
 
 if __name__ == "__main__":
-    output(test_model_nl())
+    mod = Model('Holland')
+    # mod.make_routes()
+    # output(test_model())
+    print(mod.stations['Alkmaar'].connections)

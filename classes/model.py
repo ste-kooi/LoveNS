@@ -128,9 +128,24 @@ class Model:
         float
             The fraction of connections covered by the routes.
         """
-        #TODO
+        used_connections = set()
+        
+        # Loop over every route
+        for route in self.routes.values():
+            # Add unique connections from route.interconnections to used_connections
+            used_connections.update(route.interconnections)
+        
+        # Number of used connections
+        used_count = len(used_connections)
+        
+        # Total number of connections in the model
+        total_connections = len(self.connections)
+        
+        # Return the fraction of used connections / total connections
+        if total_connections == 0:
+            return 0  
+        return used_count / total_connections
 
-        return .9
         
     def total_time(self):
         """
