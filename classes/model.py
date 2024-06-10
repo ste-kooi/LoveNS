@@ -43,7 +43,7 @@ class Model:
         """
 
         # open file and read every row
-        with open(f"source/Stations{mapname}.csv") as stationfile:
+        with open(f"../source/Stations{mapname}.csv") as stationfile:
             while True:
                 stationdata = stationfile.readline().strip().split(",")
                 if stationdata[0] == "station":
@@ -68,7 +68,7 @@ class Model:
 
         # open file
         connection_id = 0
-        with open(f"source/Connecties{mapname}.csv") as connectionfile:
+        with open(f"../source/Connecties{mapname}.csv") as connectionfile:
             while True:
                 connectiondata = connectionfile.readline().strip().split(",")
                 if connectiondata[0] == "station1":

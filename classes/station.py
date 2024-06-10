@@ -17,7 +17,7 @@ class Station:
         """
 
         connection_id = connection.get_id()
-        self.connections[connection.id] = connection
+        self.connections[connection.get_id()] = connection
 
     def __repr__(self) -> str:
         return f'{self.name}'
