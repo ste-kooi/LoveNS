@@ -58,13 +58,21 @@ class Route:
         # Add the new station to the list of stations in the route.
         self.stations.append(station)
 
-    def remove_station(self, station: Station):
+    def remove_last_station(self):
         """
-        Removes a station from the route
+        Removes a station from the route and updates the route total time
         
         """
-        self.stations.remove(station)
-    
+        if self.stations:
+            # remove last station in the route
+            station = self.stations.pop()
+            # Get the last station in the resulting route
+            last_station = self.stations[-1]
+            # Find the connection from the last station to the new station. 
+            connection = last_station.connections.get(station.name)
+            self.duration -= connection.time
+
+
     def refresh_duration(self):
         duration = 0
         for interconnection in self.interconnections:

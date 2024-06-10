@@ -179,9 +179,7 @@ class Model:
         T = len(self.routes)
         p = self.get_coverage()
         Min = self.total_time()
-        print(p * 10000 - (T * 100 + Min))
         return p * 10000 - (T * 100 + Min)
-
     
         # get a sation class
 
@@ -217,9 +215,28 @@ class Model:
 
 
 if __name__ == '__main__':
-    model = Model("Nederland")
-    model.make_routes()
-    model.calculate_score()
+    model = Model("Holland")
+    train_id = 1
+    current_station = model.stations[random.choice(list(model.stations))]
+    # add new route from that station
+    # print(type(current_station))
+    model.add_route(current_station, train_id)
+    possible_connections = [station for station in current_station.connections 
+                        if station not in model.routes[train_id].stations]
+    print(current_station)
+    print(type(possible_connections[1]))
+    next_connection = current_station.connections[random.choice(possible_connections)]
+    print(next_connection)
+    print(type(next_connection))
+
+
+    # next_connection = random.choice(possible_connections)
+
+
+
+    # model.routes[1].add_station(model.stations['Castricum'])
+    # print(random.choice(list(model.routes[1].stations[1].connections.keys())))
+
 
     
     
