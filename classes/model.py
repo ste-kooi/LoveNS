@@ -15,9 +15,9 @@ class Model:
         mapname : str
             The name of the map used to locate the CSV files.
         """
-        self.stations: dict[Station] = {}
-        self.connections: dict[Connection] = {}
-        self.routes: dict[int] = {}
+        self.stations: dict[str, Station] = {}
+        self.connections: dict[int, Connection] = {}
+        self.routes: dict[int, Routes] = {}
         self.load_stations(mapname)
         self.load_connections(mapname)
 
@@ -82,12 +82,13 @@ class Model:
                 time = float(connectiondata[2])
 
                 # add every connection to self.connections
-                connection = Connection(self.stations[stationname1], self.stations[stationname2], time, connection_id)
-                self.connections[connection_id] = (connection)
+                connection1 = Connection(self.stations[stationname1], self.stations[stationname2], time, connection_id)
+                connection2 = Connection(self.stations[stationname2], self.stations[stationname1], time, connection_id)
+                self.connections[connection_id] = connection1
             
                 # add every connection to self.stations(station naam)
-                self.stations[stationname1].set_connection(connection)
-                self.stations[stationname2].set_connection(connection)
+                self.stations[stationname1].set_connection(connection1)
+                self.stations[stationname2].set_connection(connection2)
                 
                 connection_id += 1
 
@@ -191,13 +192,12 @@ class Model:
         -- dit gaat uiteindelijk naar algorithms --
         """
         for train_id in range(1,8):
-            
 
             # pick a random station
-            random_station_name = random.choice(list(self.stations.keys()))
-            current_station = self.stations[random_station_name]
+            random_station = random.choice(list(self.stations))
+            current_station = random_station
             self.add_route(current_station, train_id)
-
+            
             while self.routes[train_id].duration < 120:
                 if len(current_station.connections) > 1:
                     random_connection = random.choice(list(current_station.connections.keys()))
@@ -205,10 +205,9 @@ class Model:
                     random_connection = next(iter(current_station.connections))
 
                 new_connection = current_station.connections[random_connection]
-                self.routes[train_id].add_station(new_connection.station1)
-                current_station = new_connection.station2
-                    
-                self.routes[train_id].add_station(current_station)
+                if self.routes[train_id].check_connection(new_connection):
+                    self.routes[train_id].add_station(new_connection.get_destination())
+                    current_station = new_connection.get_destination()
 
                 #if self.routes[train_id].duration > 120:
                     #self.stations.popitem()
@@ -216,12 +215,6 @@ class Model:
 
             print(self.routes)
 
-        
-
-        
-
-
-        
 
 if __name__ == '__main__':
     model = Model("Nederland")
