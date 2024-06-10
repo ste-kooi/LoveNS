@@ -25,21 +25,7 @@ class Route:
         self.stations: list[Station] = []
         self.interconnections: list[Connection] = []
         self.duration: int = 0
-
-    def check_station(self, station: Station):
-        """
-        Checks if the connecting station and current station are the same.
-        """
-
-        connection = Connection()
         
-        last_station = self.stations[-1]
-        if last_station == connection.station1:
-            return False
-            print ("test")
-        else:
-            return True
-
     def add_station(self, station: Station):
         """
         Adds a station and the connection to the route.        
@@ -61,13 +47,21 @@ class Route:
         # Add the new station to the list of stations in the route.
         self.stations.append(station)
 
-    def remove_station(self, station: Station):
+    def remove_last_station(self):
         """
-        Removes a station from the route
+        Removes a station from the route and updates the route total time
         
         """
-        self.stations.remove(station)
-    
+        if self.stations:
+            # remove last station in the route
+            station = self.stations.pop()
+            # Get the last station in the resulting route
+            last_station = self.stations[-1]
+            # Find the connection from the last station to the new station. 
+            connection = last_station.connections.get(station.name)
+            self.duration -= connection.time
+
+
     def refresh_duration(self):
         duration = 0
         for interconnection in self.interconnections:
