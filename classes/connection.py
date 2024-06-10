@@ -15,7 +15,7 @@ class Connection:
     connection_id : int
         The unique identifier for the connection.
     """
-    def __init__(self, station1: object, station2: object, duration: int, connection_id: int) -> None:
+    def __init__(self, station1: Connection, station2: Connection, duration: int, connection_id: int) -> None:
         
         self.start = station1
         self.destination = station2
@@ -32,4 +32,4 @@ class Connection:
         return self.connection_id
 
     def  __repr__(self) -> str:
-        return f'{self.start} - {self.destination}'
+        return f'{self.station1} - {self.station2}'
