@@ -179,7 +179,6 @@ class Model:
         T = len(self.routes)
         p = self.get_coverage()
         Min = self.total_time()
-        print(p * 10000 - (T * 100 + Min))
         return p * 10000 - (T * 100 + Min)
 
     
@@ -225,8 +224,7 @@ class Model:
         
 
 if __name__ == '__main__':
-    model = Model("Nederland")
-    model.make_routes()
+    model = test
     model.calculate_score()
 
     
