@@ -2,11 +2,12 @@ from station import Station
 from connection import Connection
 from route import Route
 import random
+from typing import Dict
 
 
 class Model:
 
-    def __init__(self, mapname) -> None:
+    def __init__(self, mapname: str) -> None:
         """
         Constructs a new Model object by loading stations and connections from CSV files.
 
@@ -15,9 +16,9 @@ class Model:
         mapname : str
             The name of the map used to locate the CSV files.
         """
-        self.stations: dict[Station] = {}
-        self.connections: dict[Connection] = {}
-        self.routes: dict[int] = {}
+        self.stations: Dict[str, Station] = {}
+        self.connections: Dict[int, Connection] = {}
+        self.routes: Dict[int, Route] = {}
         self.load_stations(mapname)
         self.load_connections(mapname)
 

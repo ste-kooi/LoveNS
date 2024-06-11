@@ -6,7 +6,7 @@ class Route:
     """
     A class to represent a route for a train.
 
-    ...
+    ...s
 
     Attributes
     ----------
@@ -21,7 +21,7 @@ class Route:
     """
         
     def __init__(self, train_id: int) -> None:
-        self.train_id = train_id
+        self.train_id: int = train_id
         self.stations: list[Station] = []
         self.interconnections: list[Connection] = []
         self.duration: int = 0

@@ -15,12 +15,12 @@ class Connection:
     connection_id : int
         The unique identifier for the connection.
     """
-    def __init__(self, station1: str, station2: str, duration: int, connection_id) -> None:
+    def __init__(self, station1: str, station2: str, duration: int, connection_id: int) -> None:
         
-        self.station1 = station1
-        self.station2 = station2
+        self.station1: str = station1
+        self.station2: str = station2
         self.time: int = duration
-        self.connection_id = connection_id
+        self.connection_id: int = connection_id
 
     def get_id(self):
         return self.connection_id

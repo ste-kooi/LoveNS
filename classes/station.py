@@ -1,14 +1,15 @@
 from connection import Connection
+from typing import Dict
 
 class Station:
     """
     Represents a station in the model
     
     """
-    def __init__(self, name: str, x: int, y: int) -> None:
-        self.name = name
-        self.location = (x, y)
-        self.connections: dict[Connection] = {}
+    def __init__(self, name: str, x: float, y: float) -> None:
+        self.name: str = name
+        self.location: tuple[float, float] = (x, y)
+        self.connections: Dict[str, Connection] = {}
 
     def set_connection(self, connection) -> None:
         """
