@@ -23,7 +23,7 @@ class Route:
     def __init__(self, train_id: int) -> None:
         self.train_id: int = train_id
         self.stations: list[Station] = []
-        self.interconnections: list[Connection] = []
+        self.interconnections: set[Connection] = set()
         self.duration: int = 0
 
     def check_connection(self, connection: Connection):
@@ -52,7 +52,7 @@ class Route:
             # Check if a valid connection is found.
             if connection:
                 # Append the connection to the interconnections list.
-                self.interconnections.append(connection)
+                self.interconnections.add(connection)
                 # Update the total duration of the route.
                 self.duration += connection.time
 
@@ -71,6 +71,8 @@ class Route:
             last_station = self.stations[-1]
             # Find the connection from the last station to the new station. 
             connection = last_station.connections.get(station.name)
+            # Update duration and remove interconnection
+            self.interconnections.remove(connection)
             self.duration -= connection.time
     
     def refresh_duration(self):
