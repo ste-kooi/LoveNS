@@ -16,7 +16,7 @@ def visualise(model: Model):
     """
 
     #plot
-    fig, ax = plt.subplots()
+    fig, ax = plt.subplots(figsize=(15,9))
 
     # plot all stations on grid with station name
     for station in model.stations.values():
@@ -44,11 +44,13 @@ def visualise(model: Model):
         color = next(colors)
         ax.plot(route_x, route_y, color = color)
         
-    # add titles
-    ax.set_title("Stations + Routes")
+    # add titles and change layout
+    ax.set_title(f"Lijnvoering {model.mapname}")
+    plt.axis('off')
+
     
     # display plot
-    plt.show()
+    plt.savefig('output/model_fig.png', bbox_inches= 'tight', pad_inches=0)
     
 
 if __name__ == '__main__':
