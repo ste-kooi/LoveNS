@@ -95,6 +95,14 @@ class Model:
                 connection_id += 1
 
 
+    def get_station(self, station_name):
+        """
+        Returns a station from the model
+        
+        """
+        return self.stations[station_name]
+    
+
     def add_route(self, start_station: Station, route_id: int):
         """
         This function adds a route to the model. 
@@ -121,6 +129,12 @@ class Model:
         """
         del self.routes[route_id]
 
+    def get_route(self, route_id):
+        """
+        Returns a route from the model
+        
+        """
+        return self.routes[route_id]
                 
     def get_coverage(self):
         """

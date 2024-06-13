@@ -23,5 +23,13 @@ class Station:
         
         self.connections[destination.name] = connection
 
+    
+    def get_connections(self):
+        """
+        Returns the connections from the station
+        
+        """
+        return self.connections
+
     def __repr__(self) -> str:
         return f'{self.name}'

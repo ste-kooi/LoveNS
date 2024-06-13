@@ -75,6 +75,13 @@ class Route:
             self.interconnections.remove(connection)
             self.duration -= connection.time
     
+    def get_stations(self):
+        """
+        Returns all stations from the route
+        
+        """
+        return self.stations
+    
     def refresh_duration(self):
         duration = 0
         for interconnection in self.interconnections:
