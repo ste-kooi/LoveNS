@@ -1,4 +1,4 @@
-from model import Model
+from classes.model import Model
 import random
 
 
@@ -12,24 +12,24 @@ def test_model():
     # Route 1
     model.add_route(model.stations['Beverwijk'], 1)
     model.routes[1].add_station(model.stations['Castricum'])
-    # model.routes[1].add_station(model.stations['Alkmaar'])
-    # model.routes[1].add_station(model.stations['Hoorn'])
-    # model.routes[1].add_station(model.stations['Zaandam'])
+    model.routes[1].add_station(model.stations['Alkmaar'])
+    model.routes[1].add_station(model.stations['Hoorn'])
+    model.routes[1].add_station(model.stations['Zaandam'])
 
-    # # Route 2
-    # model.add_route(model.stations['Amsterdam Sloterdijk'], 2)
-    # model.routes[2].add_station(model.stations['Amsterdam Centraal'])
-    # model.routes[2].add_station(model.stations['Amsterdam Amstel'])
-    # model.routes[2].add_station(model.stations['Amsterdam Zuid'])
-    # model.routes[2].add_station(model.stations['Schiphol Airport'])
+    # Route 2
+    model.add_route(model.stations['Amsterdam Sloterdijk'], 2)
+    model.routes[2].add_station(model.stations['Amsterdam Centraal'])
+    model.routes[2].add_station(model.stations['Amsterdam Amstel'])
+    model.routes[2].add_station(model.stations['Amsterdam Zuid'])
+    model.routes[2].add_station(model.stations['Schiphol Airport'])
 
-    # # Route 3
-    # model.add_route(model.stations['Rotterdam Alexander'], 3)
-    # model.routes[3].add_station(model.stations['Gouda'])
-    # model.routes[3].add_station(model.stations['Alphen a/d Rijn'])
-    # model.routes[3].add_station(model.stations['Leiden Centraal'])
-    # model.routes[3].add_station(model.stations['Schiphol Airport'])
-    # model.routes[3].add_station(model.stations['Amsterdam Zuid'])
+    # Route 3
+    model.add_route(model.stations['Rotterdam Alexander'], 3)
+    model.routes[3].add_station(model.stations['Gouda'])
+    model.routes[3].add_station(model.stations['Alphen a/d Rijn'])
+    model.routes[3].add_station(model.stations['Leiden Centraal'])
+    model.routes[3].add_station(model.stations['Schiphol Airport'])
+    model.routes[3].add_station(model.stations['Amsterdam Zuid'])
 
     return model
 
@@ -60,17 +60,3 @@ def test_model_nl():
 
     return model
 
-
-if __name__ == '__main__':
-    # model = test_model()
-    # model = Model('Holland')
-    # model.make_routes()
-    # print(model.stations['Amsterdam Amstel'].connections.keys())
-    # print(model.stations['Amsterdam Zuid'].connections.keys())
-    # print(model.stations['Hoorn'].connections['Alkmaar'].time)
-    model = test_model()
-    # trein = 3
-    # stat = 3
-    # print(f'Connections van {model.routes[trein].stations[stat]}:{model.routes[trein].stations[stat].connections}')
-    print(len(model.connections))
-    print(model.get_coverage())

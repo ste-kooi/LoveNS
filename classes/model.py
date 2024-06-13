@@ -1,6 +1,6 @@
-from station import Station
-from connection import Connection
-from route import Route
+from classes.station import Station
+from classes.connection import Connection
+from classes.route import Route
 import random
 from typing import Dict
 
@@ -16,8 +16,10 @@ class Model:
         mapname : str
             The name of the map used to locate the CSV files.
         """
+        self.mapname: str = mapname
         self.stations: Dict[str, Station] = {}
         self.connections: Dict[int, Connection] = {}
+        self.used_connections = set()
         self.routes: Dict[int, Route] = {}
         self.load_stations(mapname)
         self.load_connections(mapname)
@@ -84,7 +86,7 @@ class Model:
 
                 # add every connection to self.connections
                 connection = Connection(self.stations[stationname1], self.stations[stationname2], time, connection_id)
-                self.connections[connection_id] = (connection)
+                self.connections[connection_id] = connection
             
                 # add every connection to self.stations(station naam)
                 self.stations[stationname1].set_connection(connection)
@@ -217,15 +219,5 @@ class Model:
             print(self.routes)
 
         
-
-        
-
-
-        
-
-if __name__ == '__main__':
-    model = test
-    model.calculate_score()
-
     
     

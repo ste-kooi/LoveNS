@@ -1,4 +1,4 @@
-from connection import Connection
+from classes.connection import Connection
 from typing import Dict
 
 class Station:

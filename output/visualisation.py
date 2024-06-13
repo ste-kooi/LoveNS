@@ -1,13 +1,8 @@
-import sys
-import os
+from classes.model import Model
 import matplotlib.pyplot as plt
 from itertools import cycle
 import numpy as np
 
-# Add the path to the classes folder to sys.path
-sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '../classes')))
-from model import Model
-from test_model import test_model
 
 def visualise(model: Model):
     """
@@ -22,7 +17,7 @@ def visualise(model: Model):
     for station in model.stations.values():
         x, y = station.location
         ax.plot(x, y, 'o')
-        ax.annotate(station.name, (x, y), textcoords="offset points", xytext=(5,5), ha='center')
+        ax.annotate(station.name, (x, y), textcoords="offset points", xytext=(5,5), ha='center', size=7)
               
     # plot routes
 
@@ -52,8 +47,3 @@ def visualise(model: Model):
     # display plot
     plt.savefig('output/model_fig.png', bbox_inches= 'tight', pad_inches=0)
     
-
-if __name__ == '__main__':
-    mod = Model('Holland')
-    mod.make_routes()
-    visualise(mod)

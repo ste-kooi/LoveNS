@@ -1,13 +1,5 @@
+from classes.model import Model
 import csv
-import sys
-import os
-
-# Add the path to the classes folder to sys.path
-sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '../classes')))
-from model import Model
-from test_model import test_model
-from test_model import test_model_nl
-
 
 def output(model: Model):
     """
@@ -40,8 +32,3 @@ def output(model: Model):
     print(f"Data has been written to {filename}")
 
 
-if __name__ == "__main__":
-    mod = Model('Holland')
-    # mod.make_routes()
-    # output(test_model())
-    print(mod.stations['Alkmaar'].connections)
