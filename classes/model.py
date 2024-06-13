@@ -199,38 +199,32 @@ class Model:
 
     
         # get a sation class
-
-    def make_routes(self):
+    def get_stations_unused_connections(self):
         """
-        Generates random routes for the model, ensuring each route does not exceed 120 minutes.
-
-        -- dit gaat uiteindelijk naar algorithms --
+        Checks the model for stations that still have unused connections.
+        Returns a list of station names.
+        
         """
-        for train_id in range(1,8):
-            
+        return [station for station in self.stations if any(
+        conn not in self.used_connections for conn in self.stations[station].connections.values()
+        )]
 
-            # pick a random station
-            random_station_name = random.choice(list(self.stations.keys()))
-            current_station = self.stations[random_station_name]
-            self.add_route(current_station, train_id)
+    def update_used_connections(self, route_id):
+        """
+        Checks all connections in a route and joins them with the model used connections set.
+        
+        """
 
-            while self.routes[train_id].duration < 120:
-                if len(current_station.connections) > 1:
-                    random_connection = random.choice(list(current_station.connections.keys()))
-                else:
-                    random_connection = next(iter(current_station.connections))
+        self.used_connections = self.used_connections.union(self.routes[route_id].interconnections)
 
-                new_connection = current_station.connections[random_connection]
-                self.routes[train_id].add_station(new_connection.station1)
-                current_station = new_connection.station2
-                    
-                self.routes[train_id].add_station(current_station)
+    def clear_routes(self):
+        """
+        Empties the routes and used_connections
 
-                #if self.routes[train_id].duration > 120:
-                    #self.stations.popitem()
-                    #break
+        """
+        self.routes = {}
+        self.used_connections = set()
 
-            print(self.routes)
 
         
     
