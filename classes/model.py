@@ -1,4 +1,4 @@
-from classes.station import Station
+sfrom classes.station import Station
 from classes.connection import Connection
 from classes.route import Route
 import random
@@ -125,6 +125,12 @@ class Model:
         route = Route(route_id)
         route.add_station(start_station)
         self.routes[route_id] = route
+        
+    def add_excisting_route(self, excisting_route):
+        """
+        This function adds an excisting route to the model. 
+        """
+        self.routes[excisting_route.train_id] = excisting_route
 
     def remove_route(self, route_id: int):
         """
