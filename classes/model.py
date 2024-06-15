@@ -17,13 +17,13 @@ class Model:
             The name of the map used to locate the CSV files.
         """
         self.mapname: str = mapname
-        self.stations: Dict[str, Station] = {}
-        self.connections: Dict[int, Connection] = {}
-        self.used_connections = set()
+        self.max_routes: int = 0
+        self.max_time: int = 0
+        self.stations: Dict[str, Station] = self.load_stations(mapname)
+        self.connections: Dict[int, Connection] = self.load_connections(mapname)
         self.routes: Dict[int, Route] = {}
-        self.load_stations(mapname)
-        self.load_connections(mapname)
-
+        self.used_connections: set = set()
+        
     def __repr__(self):
         """
         Only for printing DELETE LATER.
@@ -35,7 +35,7 @@ class Model:
         s += 'self.routes:'+str(self.routes)+'\n'
         return s
 
-    def load_stations(self, mapname):
+    def load_stations(self, mapname: str):
         """
         Loads stations from a CSV file into the model.
 
@@ -44,7 +44,14 @@ class Model:
         mapname : str
             The name of the map used to locate the CSV file.
         """
+        
+        # load model constraints
+        if mapname == 'Nederland':
+            self.max_routes, self.max_time = 20, 180
+        else:
+            self.max_routes, self.max_time = 7, 120
 
+        stations = {}
         # open file and read every row
         with open(f"source/Stations{mapname}.csv") as stationfile:
             while True:
@@ -53,13 +60,13 @@ class Model:
                     continue
                 
                 if len(stationdata) == 1:
-                    return
+                    return stations
 
                 # add every station to self.stations
                                                              # naam            x                     y
-                self.stations[stationdata[0]] = ((Station(stationdata[0], float(stationdata[2]), float(stationdata[1]))))
+                stations[stationdata[0]] = ((Station(stationdata[0], float(stationdata[2]), float(stationdata[1]))))
 
-    def load_connections(self, mapname):
+    def load_connections(self, mapname: str):
         """
         Loads connections from a CSV file into the model and into the stations.
 
@@ -71,6 +78,7 @@ class Model:
 
         # open file
         connection_id = 0
+        connections = {}
         with open(f"source/Connecties{mapname}.csv") as connectionfile:
             while True:
                 connectiondata = connectionfile.readline().strip().split(",")
@@ -78,7 +86,7 @@ class Model:
                     continue
                 
                 if len(connectiondata) == 1:
-                    return False
+                    return connections
 
                 stationname1 = connectiondata[0]
                 stationname2 = connectiondata[1]
@@ -86,7 +94,7 @@ class Model:
 
                 # add every connection to self.connections
                 connection = Connection(self.stations[stationname1], self.stations[stationname2], time, connection_id)
-                self.connections[connection_id] = connection
+                connections[connection_id] = connection
             
                 # add every connection to self.stations(station naam)
                 self.stations[stationname1].set_connection(connection)
@@ -95,7 +103,7 @@ class Model:
                 connection_id += 1
 
 
-    def get_station(self, station_name):
+    def get_station(self, station_name: str):
         """
         Returns a station from the model
         
@@ -127,9 +135,9 @@ class Model:
         route_id : int
             The unique identifier for the route.
         """
-        del self.routes[route_id]
+        self.routes[route_id]
 
-    def get_route(self, route_id):
+    def get_route(self, route_id: int):
         """
         Returns a route from the model
         
@@ -209,7 +217,7 @@ class Model:
         conn not in self.used_connections for conn in self.stations[station].connections.values()
         )]
 
-    def update_used_connections(self, route_id):
+    def update_used_connections(self, route_id: int):
         """
         Checks all connections in a route and joins them with the model used connections set.
         
