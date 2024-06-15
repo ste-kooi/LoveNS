@@ -1,4 +1,4 @@
-sfrom classes.station import Station
+from classes.station import Station
 from classes.connection import Connection
 from classes.route import Route
 import random
