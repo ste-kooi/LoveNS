@@ -41,12 +41,17 @@ class Depth_first_route:
         current_route: Route
             current_route is a route with at least 1 station
         """
+        # get last station from route
         current_station = current_route.get_stations()[-1]
+        # get all connections from station
         possible_connections: dict[str, Connection] = current_station.get_connections()
         for station in possible_connections.keys():
+            # check if valid connection, if not skip connection
             if not current_route.check_connection(possible_connections[station]):
                 continue
+            # retrieve station object from station name
             new_station = self.model.stations[station]
+            # copy route option, so not all routes are the same
             route_option = copy.deepcopy(current_route)
             route_option.add_station(new_station)
             self.options.append(route_option)
@@ -60,7 +65,7 @@ class Depth_first_route:
     def check_score(self) -> bool:
         """
         Calculates the score of the entire model and compares it to best_solution.
-        If score is higher the score and the route are saved in best_score and best_route
+        If score is higher the score is saved in best_score
         """
         score = self.model.calculate_score()
         if score > self.best_solution:
@@ -77,16 +82,21 @@ class Depth_first_route:
         Removes route from model and adds the best_route
         Returns the complete model
         """           
+        # check if there are still options left
         while self.options:   
             current_route = self.get_next_option()
             
+            # check if route is within max_time
             if current_route.duration < self.max_time:
                 self.make_children(current_route)
+                # add route to model for score checking
                 self.model.add_excisting_route(current_route)
                 
                 if self.check_score():
+                    # if new high score current_route is best_route
                     self.best_route = current_route
                     
+                #remove current_route from model so there is room to add best_route
                 self.model.remove_route(current_route.train_id)
                 self.model.add_excisting_route(self.best_route)
         
