@@ -22,7 +22,7 @@ def visualise(model: Model):
     # plot routes
 
     # create color cycle
-    colors = cycle(plt.cm.tab10.colors)
+    colors = cycle(plt.cm.tab20.colors)
 
     for route in model.routes.values():
         # Extract x and y coordinates for each station in the route
