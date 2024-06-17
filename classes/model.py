@@ -17,13 +17,13 @@ class Model:
             The name of the map used to locate the CSV files.
         """
         self.mapname: str = mapname
-        self.stations: Dict[str, Station] = {}
-        self.connections: Dict[int, Connection] = {}
-        self.used_connections = set()
+        self.max_routes: int = 0
+        self.max_time: int = 0
+        self.stations: Dict[str, Station] = self.load_stations(mapname)
+        self.connections: Dict[int, Connection] = self.load_connections(mapname)
         self.routes: Dict[int, Route] = {}
-        self.load_stations(mapname)
-        self.load_connections(mapname)
-
+        self.used_connections: set = set()
+        
     def __repr__(self):
         """
         Only for printing DELETE LATER.
@@ -35,7 +35,7 @@ class Model:
         s += 'self.routes:'+str(self.routes)+'\n'
         return s
 
-    def load_stations(self, mapname):
+    def load_stations(self, mapname: str):
         """
         Loads stations from a CSV file into the model.
 
@@ -44,7 +44,14 @@ class Model:
         mapname : str
             The name of the map used to locate the CSV file.
         """
+        
+        # load model constraints
+        if mapname == 'Nederland':
+            self.max_routes, self.max_time = 20, 180
+        else:
+            self.max_routes, self.max_time = 7, 120
 
+        stations = {}
         # open file and read every row
         with open(f"source/Stations{mapname}.csv") as stationfile:
             while True:
@@ -53,13 +60,13 @@ class Model:
                     continue
                 
                 if len(stationdata) == 1:
-                    return
+                    return stations
 
                 # add every station to self.stations
                                                              # naam            x                     y
-                self.stations[stationdata[0]] = ((Station(stationdata[0], float(stationdata[2]), float(stationdata[1]))))
+                stations[stationdata[0]] = ((Station(stationdata[0], float(stationdata[2]), float(stationdata[1]))))
 
-    def load_connections(self, mapname):
+    def load_connections(self, mapname: str):
         """
         Loads connections from a CSV file into the model and into the stations.
 
@@ -71,6 +78,7 @@ class Model:
 
         # open file
         connection_id = 0
+        connections = {}
         with open(f"source/Connecties{mapname}.csv") as connectionfile:
             while True:
                 connectiondata = connectionfile.readline().strip().split(",")
@@ -78,7 +86,7 @@ class Model:
                     continue
                 
                 if len(connectiondata) == 1:
-                    return False
+                    return connections
 
                 stationname1 = connectiondata[0]
                 stationname2 = connectiondata[1]
@@ -86,7 +94,7 @@ class Model:
 
                 # add every connection to self.connections
                 connection = Connection(self.stations[stationname1], self.stations[stationname2], time, connection_id)
-                self.connections[connection_id] = connection
+                connections[connection_id] = connection
             
                 # add every connection to self.stations(station naam)
                 self.stations[stationname1].set_connection(connection)
@@ -95,7 +103,7 @@ class Model:
                 connection_id += 1
 
 
-    def get_station(self, station_name):
+    def get_station(self, station_name: str):
         """
         Returns a station from the model
         
@@ -117,6 +125,12 @@ class Model:
         route = Route(route_id)
         route.add_station(start_station)
         self.routes[route_id] = route
+        
+    def add_excisting_route(self, excisting_route):
+        """
+        This function adds an excisting route to the model. 
+        """
+        self.routes[excisting_route.train_id] = excisting_route
 
     def remove_route(self, route_id: int):
         """
@@ -127,9 +141,10 @@ class Model:
         route_id : int
             The unique identifier for the route.
         """
-        del self.routes[route_id]
+        if self.routes[route_id]:
+            del self.routes[route_id]
 
-    def get_route(self, route_id):
+    def get_route(self, route_id: int):
         """
         Returns a route from the model
         
@@ -145,15 +160,16 @@ class Model:
         float
             The fraction of connections covered by the routes.
         """
-        used_connections = set()
+        self.used_connections = set()
         
         # Loop over every route
         for route in self.routes.values():
             # Add unique connections from route.interconnections to used_connections
-            used_connections.update(route.interconnections)
+            for interconnection in route.interconnections:
+                self.used_connections.add(interconnection.get_id())
         
         # Number of used connections
-        used_count = len(used_connections)
+        used_count = len(self.used_connections)
         
         # Total number of connections in the model
         total_connections = len(self.connections)
@@ -199,38 +215,32 @@ class Model:
 
     
         # get a sation class
-
-    def make_routes(self):
+    def get_stations_unused_connections(self):
         """
-        Generates random routes for the model, ensuring each route does not exceed 120 minutes.
-
-        -- dit gaat uiteindelijk naar algorithms --
+        Checks the model for stations that still have unused connections.
+        Returns a list of station names.
+        
         """
-        for train_id in range(1,8):
-            
+        return [station for station in self.stations if any(
+        conn not in self.used_connections for conn in self.stations[station].connections.values()
+        )]
 
-            # pick a random station
-            random_station_name = random.choice(list(self.stations.keys()))
-            current_station = self.stations[random_station_name]
-            self.add_route(current_station, train_id)
+    def update_used_connections(self, route_id: int):
+        """
+        Checks all connections in a route and joins them with the model used connections set.
+        
+        """
 
-            while self.routes[train_id].duration < 120:
-                if len(current_station.connections) > 1:
-                    random_connection = random.choice(list(current_station.connections.keys()))
-                else:
-                    random_connection = next(iter(current_station.connections))
+        self.used_connections = self.used_connections.union(self.routes[route_id].interconnections)
 
-                new_connection = current_station.connections[random_connection]
-                self.routes[train_id].add_station(new_connection.station1)
-                current_station = new_connection.station2
-                    
-                self.routes[train_id].add_station(current_station)
+    def clear_routes(self):
+        """
+        Empties the routes and used_connections
 
-                #if self.routes[train_id].duration > 120:
-                    #self.stations.popitem()
-                    #break
+        """
+        self.routes = {}
+        self.used_connections = set()
 
-            print(self.routes)
 
         
     

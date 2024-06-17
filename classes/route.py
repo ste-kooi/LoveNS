@@ -31,9 +31,9 @@ class Route:
         Checks if the chosen connection and the used interconnections are the same.
 
         """
-        chosen_interconnection = interconnection.get_id()
+        chosen_interconnection = connection.get_id()
         for interconnection in self.interconnections:
-            used_interconnection = interconnection.get_connection()
+            used_interconnection = interconnection.get_id()
             if chosen_interconnection == used_interconnection:
                 return False
         return True
