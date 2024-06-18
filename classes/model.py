@@ -160,13 +160,14 @@ class Model:
         float
             The fraction of connections covered by the routes.
         """
-        self.used_connections = set()
+        local_used_connections = set()
         
         # Loop over every route
         for route in self.routes.values():
             # Add unique connections from route.interconnections to used_connections
             for interconnection in route.interconnections:
-                self.used_connections.add(interconnection.get_id())
+                local_used_connections.add(interconnection.get_id())
+
         
         # Number of used connections
         used_count = len(self.used_connections)
