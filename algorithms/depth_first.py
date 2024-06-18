@@ -6,7 +6,7 @@ from classes.connection import Connection
 
 
 class Depth_first_route:
-    def __init__(self, model: Model, route: Route) -> None:
+    def __init__(self, model: Model, route: Route, score = 0) -> None:
         """
         loads in the model and the route that needs to be changed. 
         Max_time is dependent of the given model and determines the maximum length of the routes.
@@ -27,7 +27,7 @@ class Depth_first_route:
         self.max_time = self.model.max_time
 
         self.options: list[Route] = [self.best_route]
-        self.best_solution = 0
+        self.best_solution = score
 
     def make_children(self, current_route: Route) -> None:
         """
@@ -54,7 +54,8 @@ class Depth_first_route:
             # copy route option, so not all routes are the same
             route_option = copy.deepcopy(current_route)
             route_option.add_station(new_station)
-            self.options.append(route_option)
+            if route_option.duration < 120:
+                self.options.append(route_option)
     
     def get_next_option(self) -> Route:
         """
@@ -68,20 +69,20 @@ class Depth_first_route:
         If score is higher the score is saved in best_score
         """
         score = self.model.calculate_score()
-        if score > self.best_solution:
+        if score >= self.best_solution:
             self.best_solution = score
             print(f"new best score: {self.best_solution}")
             return True
         return False
     
-    def run(self) -> Model: 
+    def run(self) -> tuple[Model, int]: 
         """
         Takes a route of the options list as long as there are options. 
         Checks if route is shorter than max_time
         If so, makes children, add it to the model and checks score of model
         Removes route from model and adds the best_route
         Returns the complete model
-        """           
+        """         
         # check if there are still options left
         while self.options:   
             current_route = self.get_next_option()
@@ -100,4 +101,7 @@ class Depth_first_route:
                 self.model.remove_route(current_route.train_id)
                 self.model.add_excisting_route(self.best_route)
         
-        return self.model
+        if len(self.best_route.stations) == 1:
+            self.model.remove_route(self.best_route.train_id)
+        
+        return self.model, self.best_solution
