@@ -23,7 +23,7 @@ class Model:
         self.connections: Dict[int, Connection] = self.load_connections(mapname)
         self.routes: Dict[int, Route] = {}
         self.used_connections: set = set()
-        
+
     def __repr__(self):
         """
         Only for printing DELETE LATER.
@@ -44,7 +44,7 @@ class Model:
         mapname : str
             The name of the map used to locate the CSV file.
         """
-        
+
         # load model constraints
         if mapname == 'Nederland':
             self.max_routes, self.max_time = 20, 180
@@ -58,7 +58,7 @@ class Model:
                 stationdata = stationfile.readline().strip().split(",")
                 if stationdata[0] == "station":
                     continue
-                
+
                 if len(stationdata) == 1:
                     return stations
 
@@ -84,7 +84,7 @@ class Model:
                 connectiondata = connectionfile.readline().strip().split(",")
                 if connectiondata[0] == "station1":
                     continue
-                
+
                 if len(connectiondata) == 1:
                     return connections
 
@@ -95,25 +95,25 @@ class Model:
                 # add every connection to self.connections
                 connection = Connection(self.stations[stationname1], self.stations[stationname2], time, connection_id)
                 connections[connection_id] = connection
-            
+
                 # add every connection to self.stations(station naam)
                 self.stations[stationname1].set_connection(connection)
                 self.stations[stationname2].set_connection(connection)
-                
+
                 connection_id += 1
 
 
     def get_station(self, station_name: str):
         """
         Returns a station from the model
-        
+
         """
         return self.stations[station_name]
-    
+
 
     def add_route(self, start_station: Station, route_id: int):
         """
-        This function adds a route to the model. 
+        This function adds a route to the model.
 
         Parameters
         ----------
@@ -125,32 +125,33 @@ class Model:
         route = Route(route_id)
         route.add_station(start_station)
         self.routes[route_id] = route
-        
+
     def add_excisting_route(self, excisting_route):
         """
-        This function adds an excisting route to the model. 
+        This function adds an excisting route to the model.
         """
         self.routes[excisting_route.train_id] = excisting_route
 
     def remove_route(self, route_id: int):
         """
-        This function removes a route from the model. 
+        This function removes a route from the model.
 
         Parameters
         ---------
         route_id : int
             The unique identifier for the route.
         """
-        if self.routes[route_id]:
+        if route_id in self.routes:
+            self.used_connections - self.routes[route_id].interconnections
             del self.routes[route_id]
 
     def get_route(self, route_id: int):
         """
         Returns a route from the model
-        
+
         """
         return self.routes[route_id]
-                
+
     def get_coverage(self):
         """
         Calculates the fraction of covered connections.
@@ -161,26 +162,26 @@ class Model:
             The fraction of connections covered by the routes.
         """
         self.local_used_connections = set()
-        
+
         # Loop over every route
         for route in self.routes.values():
             # Add unique connections from route.interconnections to used_connections
             for interconnection in route.interconnections:
                 self.local_used_connections.add(interconnection.get_id())
 
-        
+
         # Number of used connections
         used_count = len(self.local_used_connections)
-        
+
         # Total number of connections in the model
         total_connections = len(self.connections)
-        
+
         # Return the fraction of used connections / total connections
         if total_connections == 0:
-            return 0  
+            return 0
         return used_count / total_connections
 
-        
+
     def total_time(self):
         """
         Calculates the total time of all routes.
@@ -192,8 +193,8 @@ class Model:
         for route in self.routes.values():
             duration += route.duration
         return duration
-            
-    
+
+
     def calculate_score(self) -> float:
         """
         This function calculates a K score from the model following the formula:
@@ -214,25 +215,31 @@ class Model:
         Min = self.total_time()
         return p * 10000 - (T * 100 + Min)
 
-    
+
         # get a sation class
     def get_stations_unused_connections(self):
         """
         Checks the model for stations that still have unused connections.
         Returns a list of station names.
-        
+
         """
-        return [station for station in self.stations if any(
+        unused = [station for station in self.stations if any(
         conn not in self.used_connections for conn in self.stations[station].connections.values()
         )]
 
-    def update_used_connections(self, route_id: int):
+        if unused:
+            return unused
+        return list(self.stations.keys())
+
+    def update_used_connections(self):
         """
         Checks all connections in a route and joins them with the model used connections set.
-        
+
         """
 
-        self.used_connections = self.used_connections.union(self.routes[route_id].interconnections)
+        for route_id in self.routes:
+            self.used_connections = self.used_connections.union(self.routes[route_id].interconnections)
+
 
     def clear_routes(self):
         """
@@ -243,6 +250,5 @@ class Model:
         self.used_connections = set()
 
 
-        
-    
-    
+
+
