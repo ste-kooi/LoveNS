@@ -13,17 +13,20 @@ class Greedy():
 
     def make_route(self, new_model: Model):
         route_id = 1
-        route_dur = 0
         used_connections = set()
+        used_starting_station = []
         new_station = random.choice(list(new_model.stations.values()))
-        print(new_station)
+
+        while new_station.name in used_starting_station:
+            new_station = random.choice(list(new_model.stations.values()))
+
+        used_starting_station.append(new_station.name)
 
         new_model.add_route(new_station, route_id)
-        print(new_model.routes)
+
 
         while new_model.routes[route_id].duration < new_model.max_time:
             sorted_connections = sorted(new_station.connections.values(), key=lambda con: con.time)
-            print(sorted_connections)
 
             best_connection = sorted_connections[0]
 
@@ -46,7 +49,28 @@ class Greedy():
                 used_connections = set()
                 break
 
-            print(new_model.routes)
+        print(new_model.routes)
+
+    def make_model(self, new_model: Model, number_of_routes=1):
+        for _ in range(number_of_routes):
+            self.make_route(new_model)
+
+    def compare_score(self, new_model: Model):
+        new_score = new_model.calculate_score()
+        old_score = self.score
+
+        if new_score >= old_score:
+            self.model = new_model
+            old_score = new_score
+
+    def run(self, iterations: int):
+        for iteration in range(iterations):
+
+            print(f'Iteration {iteration}/{iterations}, current value: {self.score}')
+
+            # create copy of the model to simulate the change
+            new_model = copy.deepcopy(self.model)
+
 
 
 
