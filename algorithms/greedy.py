@@ -1,4 +1,6 @@
 from classes.model import Model
+from classes.route import Route
+from algorithms.randomise import random_routes
 import random
 import copy
 
@@ -6,11 +8,54 @@ class Greedy():
 
     def __init__(self, model: Model) -> None:
         self.model = copy.deepcopy(model)
+        self.usable_connections = self.model.connections
         self.score = self.model.calculate_score()
 
     def make_route(self, new_model: Model):
-        new_route = random.choice(list(new_model.stations))
-        print(new_route)
+        route_id = 1
+        route_dur = 0
+        used_connections = set()
+        new_station = random.choice(list(new_model.stations.values()))
+        print(new_station)
+
+        new_model.add_route(new_station, route_id)
+        print(new_model.routes)
+
+        while new_model.routes[route_id].duration < new_model.max_time:
+            sorted_connections = sorted(new_station.connections.values(), key=lambda con: con.time)
+            print(sorted_connections)
+
+            best_connection = sorted_connections[0]
+
+            for connection in sorted_connections:
+                if connection not in used_connections:
+                    best_connection = connection
+
+            if best_connection.station1 == new_station:
+                new_station = best_connection.station2
+            else:
+                new_station = best_connection.station1
+
+            used_connections.add(best_connection)
+            new_model.routes[route_id].add_station(new_station)
+            new_model.routes[route_id].refresh_duration()
+
+            if new_model.routes[route_id].duration >= 120:
+                new_model.routes[route_id].remove_last_station()
+                route_id += 1
+                used_connections = set()
+                break
+
+            print(new_model.routes)
+
+
+
+
+
+
+
+
+
 
 
 
