@@ -19,7 +19,7 @@ class Route:
     train_id : int
         The unique identifier for the train route
     """
-        
+
     def __init__(self, train_id: int) -> None:
         self.train_id: int = train_id
         self.stations: list[Station] = []
@@ -40,7 +40,7 @@ class Route:
 
     def add_station(self, station: Station):
         """
-        Adds a station and the connection to the route.        
+        Adds a station and the connection to the route.
         """
 
             # Check if the route already contains stations.
@@ -62,23 +62,24 @@ class Route:
     def remove_last_station(self):
         """
         Removes a station from the route and updates the route total time
-        
+
         """
         if self.stations:
             # remove last station in the route
             station = self.stations.pop()
             # Get the last station in the resulting route
-            last_station = self.stations[-1]
-            # Find the connection from the last station to the new station. 
-            connection = last_station.connections.get(station.name)
-            # Update duration and remove interconnection
-            self.interconnections.remove(connection)
-            self.duration -= connection.time
-    
+            if self.stations:
+                last_station = self.stations[-1]
+                # Find the connection from the last station to the new station.
+                connection = last_station.connections.get(station.name)
+                # Update duration and remove interconnection
+                self.interconnections.discard(connection)
+                self.duration -= connection.time
+
     def get_stations(self):
         """
         Returns all stations from the route
-        
+
         """
         return self.stations
     
@@ -87,7 +88,7 @@ class Route:
         for interconnection in self.interconnections:
             duration += interconnection.time
         self.duration = duration
-        
+
     def is_valid(self) -> bool:
         """
         Returns if traject duration is below 120 minutes
@@ -95,12 +96,10 @@ class Route:
         return self.duration < 120
 
     def comp_traject(self) -> bool:
-        """ 
+        """
         Compares valiable trajects to determine best option
-    
         ."""
         pass
-    
     def __repr__(self):
         station_names = ' -> '.join([station.name for station in self.stations])
         return f'Route {self.train_id}: {station_names} (Duration: {self.duration} minutes)'
