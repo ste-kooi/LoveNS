@@ -1,18 +1,31 @@
 from classes.model import Model
-from classes.route import Route
 import random
 import copy
 
-
 class Greedy():
+
+    def __init__(self, model: Model) -> None:
+        self.model = copy.deepcopy(model)
+        self.score = self.model.calculate_score()
+
+    def make_route(self, new_model: Model):
+        new_route = random.choice(list(new_model.stations))
+        print(new_route)
+
+
+
+class was_last_version():
+
 
     def __init__(self) -> None:
         self.route_nr = 1
         self.route_dur = 0
 
         self.mod = Model("Holland")
+        self.temp_mod = copy.deepcopy(self.mod)
         self.route = Route(self.route_nr)
-        self.temp_route = copy.copy(Route(self.route_nr))
+        self.temp_route = copy.deepcopy(self.route)
+
 
     def create_greedy(self):
 
@@ -25,7 +38,6 @@ class Greedy():
                 sorted_connections = sorted(random_station.connections.values(), key=lambda con: con.time)
 
                 for connection in sorted_connections:
-
                     if connection.station1 == random_station:
                         destination_station = connection.station2
                     else:
@@ -54,7 +66,11 @@ class Greedy():
                             break
 
 
-            print(self.route)
-            print(self.temp_route)
+
+
+
+
+
+
 
 
