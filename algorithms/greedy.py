@@ -12,58 +12,64 @@ class Greedy():
         self.model = copy.deepcopy(model)
         self.usable_connections = self.model.connections
         self.score = self.model.calculate_score()
-        self.used_starting_station = []
 
-    def make_route(self, new_model: Model):
+
+    def make_routes(self, new_model: Model):
         """
         Makes a route using the shortest connection times possible, for every station.
 
         """
-        route_id = len(new_model.routes) + 1
-        used_connections = set()
-        new_station = random.choice(list(new_model.stations.values()))
+        self.used_starting_station = []
 
-        while new_station.name in self.used_starting_station:
+        for x in range(20):
+            route_id = len(new_model.routes) + 1
+            used_connections = set()
             new_station = random.choice(list(new_model.stations.values()))
 
-        self.used_starting_station.append(new_station.name)
 
-        new_model.add_route(new_station, route_id)
+            while new_station.name in self.used_starting_station:
+                new_station = random.choice(list(new_model.stations.values()))
 
-        while new_model.routes[route_id].duration < new_model.max_time:
-            sorted_connections = sorted(new_station.connections.values(), key=lambda con: con.time)
+            self.used_starting_station.append(new_station.name)
 
-            best_connection = sorted_connections[0]
+            new_model.add_route(new_station, route_id)
 
-            for connection in sorted_connections:
-                if connection not in used_connections:
-                    best_connection = connection
+            while new_model.routes[route_id].duration < new_model.max_time:
+                sorted_connections = sorted(new_station.connections.values(), key=lambda con: con.time)
 
-            if best_connection.station1 == new_station:
-                new_station = best_connection.station2
-            else:
-                new_station = best_connection.station1
+                best_connection = sorted_connections[0]
 
-            used_connections.add(best_connection)
-            new_model.routes[route_id].add_station(new_station)
-            new_model.routes[route_id].refresh_duration()
+                for connection in sorted_connections:
+                    if connection not in used_connections:
+                        best_connection = connection
 
-            if new_model.routes[route_id].duration >= 120:
-                new_model.routes[route_id].remove_last_station()
-                used_connections = set()
-                break
+                if best_connection.station1 == new_station:
+                    new_station = best_connection.station2
+                else:
+                    new_station = best_connection.station1
 
-    def make_model(self, new_model: Model, number_of_routes):
+                used_connections.add(best_connection)
+                new_model.routes[route_id].add_station(new_station)
+                new_model.routes[route_id].refresh_duration()
+
+                if new_model.routes[route_id].duration >= 120:
+                    new_model.routes[route_id].remove_last_station()
+                    used_connections = set()
+                    break
+        print(new_model.calculate_score())
+        print(new_model.routes)
+
+    def make_models(self, new_model: Model, number_of_models):
         """
-        Makes a model using x number of routes.
+        Makes models x number of models.
         """
-        for _ in range(number_of_routes):
-            self.make_route(new_model)
+        for _ in range(number_of_models):
+            self.make_routes(new_model)
 
     def compare_score(self, new_model: Model):
         """
         Compares the overall scores of 2 different
-        model and saves the best score.
+        models and saves the best score.
         """
         new_score = new_model.calculate_score()
         old_score = self.score
@@ -83,13 +89,13 @@ class Greedy():
             # create copy of the model to simulate the change
             new_model = copy.deepcopy(self.model)
 
-            method = random.choice([self.make_route, self.make_model])
+            method = random.choice([self.make_routes, self.make_models])
 
             # Call the selected method with the appropriate parameters
-            if method == self.make_route:
+            if method == self.make_routes:
                 method(new_model)
             else:
-                method(new_model, number_of_routes=1)
+                method(new_model, number_of_models=1)
 
             # Compare the scores and potentially update the model
             self.compare_score(new_model)
