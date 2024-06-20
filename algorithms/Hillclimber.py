@@ -26,7 +26,6 @@ class HillClimber:
         random_reconfigure_route(new_model, random_route_id)
 
 
-
     def mutate_model(self, new_model, number_of_routes=1):
         """
         Changes the value of a number of routes with a random valid value.
@@ -53,8 +52,7 @@ class HillClimber:
 
     def delete_routes(self, new_model: Model):
 
-        route_1 = random.choice(list(new_model.routes))
-        route_2 = random.choice(list(new_model.routes))
+        route_1, route_2 = random.sample(list(new_model.routes), 2)
         new_model.remove_route(route_1)
         new_model.remove_route((route_2))
         start_station = new_model.stations[random.choice(new_model.get_stations_unused_connections())]
@@ -70,7 +68,7 @@ class HillClimber:
         old_score = self.score
 
 
-        # accept higher scores
+        # accept equal and higher scores
         if new_score >= old_score:
             self.model = new_model
             self.score = new_score
@@ -87,7 +85,7 @@ class HillClimber:
             new_model = copy.deepcopy(self.model)
 
             # pick which change to make from parameters
-            method = random.choice([self.mutate_single_route, self.mutate_end_of_routes, self.delete_routes])
+            method = random.choice([self.mutate_single_route, self.mutate_single_route, self.mutate_end_of_routes, self.delete_routes])
             method(new_model)
 
             self.check_score(new_model)
