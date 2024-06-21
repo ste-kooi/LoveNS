@@ -36,6 +36,7 @@ class HillClimber:
         random_reorder_route(new_model, route_id)
 
 
+
     def mutate_model(self, new_model, number_of_routes=1):
         """
         Changes the value of a number of routes with a random valid value.
@@ -62,7 +63,8 @@ class HillClimber:
 
     def delete_routes(self, new_model: Model):
 
-        route_1, route_2 = random.sample(list(new_model.routes), 2)
+        route_1 = random.choice(list(new_model.routes))
+        route_2 = random.choice(list(new_model.routes))
         new_model.remove_route(route_1)
         new_model.remove_route((route_2))
         start_station = new_model.stations[random.choice(new_model.get_stations_unused_connections())]
@@ -78,7 +80,7 @@ class HillClimber:
         old_score = self.score
 
 
-        # accept equal and higher scores
+        # accept higher scores
         if new_score >= old_score:
             self.model = new_model
             self.score = new_score
