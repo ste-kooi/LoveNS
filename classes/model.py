@@ -3,6 +3,7 @@ from classes.connection import Connection
 from classes.route import Route
 import random
 from typing import Dict
+import copy
 
 
 class Model:
@@ -236,7 +237,7 @@ class Model:
         Checks all connections in a route and joins them with the model used connections set.
 
         """
-
+        self.used_connections = set()
         for route_id in self.routes:
             self.used_connections = self.used_connections.union(self.routes[route_id].interconnections)
 
@@ -249,6 +250,13 @@ class Model:
         self.routes = {}
         self.used_connections = set()
 
-
+    def copy(self):
+        """
+        Creates a deep copy of the model, including routes and used_connections.
+        """
+        new_model = copy.copy(self)
+        new_model.routes = {route_id: route.deep_copy_route() for route_id, route in self.routes.items()}
+        new_model.used_connections = set(self.used_connections)
+        return new_model
 
 
