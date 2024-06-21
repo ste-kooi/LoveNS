@@ -1,4 +1,5 @@
 from classes.model import Model
+from classes.route import Route
 from algorithms.randomise import *
 from output.output import output
 from output.visualisation import visualise
@@ -24,6 +25,15 @@ class HillClimber:
         """
         random_route_id = random.choice(list(new_model.routes))
         random_reconfigure_route(new_model, random_route_id)
+
+    def reorder_single_route(self, new_model: Model, route_id = None):
+        """
+        Changes the stations of a random route to random stations
+        """
+        if route_id is None:
+            route_id = random.choice(list(new_model.routes))
+
+        random_reorder_route(new_model, route_id)
 
 
     def mutate_model(self, new_model, number_of_routes=1):
@@ -77,17 +87,36 @@ class HillClimber:
         """
         Runs the HillCLimber for a given number of iterations.
         """
+        self.iterations = iterations
         for iteration in range(iterations):
 
             print(f'Iteration {iteration}/{iterations}, current value: {self.score}')
 
             # create copy of the model to simulate the change
-            new_model = copy.deepcopy(self.model)
+            new_model = self.model.copy()
 
             # pick which change to make from parameters
-            method = random.choice([self.mutate_single_route, self.mutate_single_route, self.mutate_end_of_routes, self.delete_routes])
+            method = random.choice([self.mutate_single_route, self.mutate_single_route,
+                                    self.mutate_single_route,
+                                    self.mutate_end_of_routes, self.delete_routes,
+                                    self.mutate_end_of_routes, self.delete_routes,
+                                    self.reorder_single_route])
             method(new_model)
 
             self.check_score(new_model)
+
+        # after hillclimber is done iterate routes to reorder to the fastest versions of the routes
+        for route in self.model.routes:
+            for iteration in range(500):
+
+                print(f'Reorder route{route}: {iteration}/{100}, current value: {self.score}')
+
+                # create copy of the model to simulate the change
+                new_model = self.model.copy()
+
+                # pick which change to make from parameters
+                self.reorder_single_route(new_model, route)
+
+                self.check_score(new_model)
 
 
