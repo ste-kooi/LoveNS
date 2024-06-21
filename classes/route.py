@@ -82,7 +82,19 @@ class Route:
 
         """
         return self.stations
-    
+
+
+    def deep_copy_route(self):
+        """
+        Creates a deep copy of a route.
+        """
+        new_route = Route(self.train_id)
+        new_route.stations = list(self.stations)
+        new_route.interconnections = set(self.interconnections)
+        new_route.duration = self.duration
+        return new_route
+
+
     def refresh_duration(self):
         duration = 0
         for interconnection in self.interconnections:
