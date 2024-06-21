@@ -33,7 +33,7 @@ def random_single_route(model: Model, current_station, route_id: int):
     while model.routes[route_id].duration < model.max_time:
         # get stations from connections and filter out stations visited more than twice
         possible_connections = [station for station in current_station.get_connections()
-                                if model.get_route(route_id).get_stations().count(model.get_station(station)) < 1]
+                                if model.get_route(route_id).get_stations().count(model.get_station(station)) < 2]
         if not possible_connections:
             break
 
@@ -52,6 +52,49 @@ def random_single_route(model: Model, current_station, route_id: int):
     model.update_used_connections()
 
 
+def random_reorder_route(model: Model, route_id: int):
+
+    # Get the stations in the current route
+    stations = model.get_route(route_id).get_stations()
+    stat_set = set(stations)  # Set of unique stations to visit
+
+    # Remove the current route from the model
+    model.remove_route(route_id)
+
+    # Start with the first station in the list
+    if len(stations) >= 4:
+        current_station = random.choice(stations[:1] + stations[-2:])
+    else:
+        current_station = random.choice([stations[0]] + [stations[-1]])
+    model.add_route(current_station, route_id)
+
+    visited_stations = {current_station}
+
+    while len(visited_stations) < len(stat_set):
+        # Get possible connections from the current station
+        possible_connections = [station for station in current_station.get_connections()
+                                if model.get_station(station) in stat_set]
+
+        if not possible_connections:
+            break
+
+        # Pick the next station from possible connections
+        next_station = random.choice(possible_connections)
+        next_connection = current_station.connections[next_station]
+
+        # Check if adding the station exceeds the max duration
+        if model.get_route(route_id).duration + next_connection.time > model.max_time:
+            break
+
+        # Add the station to the route
+        current_station = model.stations[next_station]
+        model.routes[route_id].add_station(current_station)
+        visited_stations.add(current_station)
+
+
+
+
+
 def random_reconfigure_route(model: Model, route_id: int):
     """
     This function changes a route by deleting it and its connections from the model
@@ -61,7 +104,7 @@ def random_reconfigure_route(model: Model, route_id: int):
     model.used_connections = model.used_connections - model.routes[route_id].interconnections
 
     # clear route
-    model.get_route(route_id).stations = []
+    model.remove_route(route_id)
 
     # generate new random route
     current_station = model.get_station(random.choice(model.get_stations_unused_connections()))
