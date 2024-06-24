@@ -17,7 +17,7 @@ class Greedy():
         """
         Makes a route using the shortest connection times possible for every station.
         """
-        route_id = len(new_model.routes) + 1
+        self.route_id = len(new_model.routes) + 1
         used_connections = set()
         available_stations = [station for station in new_model.stations.values() if station.name not in used_starting_stations]
 
@@ -27,9 +27,9 @@ class Greedy():
         new_station = random.choice(available_stations)
         used_starting_stations.add(new_station.name)
 
-        new_model.add_route(new_station, route_id)
+        new_model.add_route(new_station, self.route_id)
 
-        while new_model.routes[route_id].duration < new_model.max_time:
+        while new_model.routes[self.route_id].duration < new_model.max_time:
             sorted_connections = sorted(new_station.connections.values(), key=lambda con: con.time)
             best_connection = None
 
@@ -47,20 +47,31 @@ class Greedy():
                 new_station = best_connection.station1
 
             used_connections.add(best_connection)
-            new_model.routes[route_id].add_station(new_station)
-            new_model.routes[route_id].refresh_duration()
+            new_model.routes[self.route_id].add_station(new_station)
+            new_model.routes[self.route_id].refresh_duration()
 
-            if new_model.routes[route_id].duration >= new_model.max_time:
-                new_model.routes[route_id].remove_last_station()
+            if new_model.routes[self.route_id].duration >= new_model.max_time:
+                new_model.routes[self.route_id].remove_last_station()
                 break
+
 
     def make_routes(self, new_model: Model):
         """
         Makes routes using the shortest connection times possible, ensuring each route starts from a different station.
         """
         used_starting_stations = set()
+        best_score = 0
         for _ in range(self.model.max_routes):
             self.make_route(new_model, used_starting_stations)
+            current_score = new_model.calculate_score()
+
+            if current_score > best_score:
+                best_score = current_score
+            elif current_score < best_score:
+                new_model.remove_route(self.route_id)
+                break
+
+        print(best_score)
 
     def compare_score(self, new_model: Model):
         """
