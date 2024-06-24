@@ -82,9 +82,8 @@ class Greedy():
 
         if new_score > self.score:
             print("New model has a better score. Updating the model.")
-            self.model = new_model
+            self.best_model = new_model
             self.score = new_score
-            self.best_model = copy.deepcopy(new_model)
         else:
             print("New model does not have a better score. Keeping the current model.")
 
@@ -98,3 +97,5 @@ class Greedy():
             self.make_routes(new_model)
             self.compare_score(new_model)
         print(f'Final score: {self.score}')
+
+        return self.best_model
