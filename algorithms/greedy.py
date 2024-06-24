@@ -1,24 +1,26 @@
 from classes.model import Model
 import random
 import copy
+from typing import Set
 
-class Greedy():
+class RandomGreedy:
     """
     The greedy class creates routes using the shortest
     connection times possible for every station.
     """
 
     def __init__(self, model: Model) -> None:
-        self.model = copy.deepcopy(model)
-        self.score = self.model.calculate_score()
-        self.best_model = copy.deepcopy(self.model)
+        self.model: Model = copy.deepcopy(model)
+        self.score: int = self.model.calculate_score()
+        self.best_model: Model = copy.deepcopy(self.model)
+        self.route_id: int = 0
 
-    def make_route(self, new_model: Model, used_starting_stations):
+    def make_route(self, new_model: Model, used_starting_stations: Set[str]) -> None:
         """
         Makes a route using the shortest connection times possible for every station.
         """
         self.route_id = len(new_model.routes) + 1
-        used_connections = set()
+        used_connections: Set = set()
         available_stations = [station for station in new_model.stations.values() if station.name not in used_starting_stations]
 
         if not available_stations:
@@ -54,13 +56,12 @@ class Greedy():
                 new_model.routes[self.route_id].remove_last_station()
                 break
 
-
-    def make_routes(self, new_model: Model):
+    def make_models(self, new_model: Model) -> None:
         """
         Makes routes using the shortest connection times possible, ensuring each route starts from a different station.
         """
-        used_starting_stations = set()
-        best_score = 0
+        used_starting_stations: Set[str] = set()
+        best_score: int = 0
         for _ in range(self.model.max_routes):
             self.make_route(new_model, used_starting_stations)
             current_score = new_model.calculate_score()
@@ -71,14 +72,11 @@ class Greedy():
                 new_model.remove_route(self.route_id)
                 break
 
-        print(best_score)
-
-    def compare_score(self, new_model: Model):
+    def compare_score(self, new_model: Model) -> None:
         """
         Compares the overall scores of 2 different models and saves the best score.
         """
         new_score = new_model.calculate_score()
-        print(f"Comparing scores: New Score = {new_score}, Current Best Score = {self.score}")
 
         if new_score > self.score:
             print("New model has a better score. Updating the model.")
@@ -87,15 +85,15 @@ class Greedy():
         else:
             print("New model does not have a better score. Keeping the current model.")
 
-    def run(self, iterations: int):
+    def run(self, iterations: int) -> Model:
         """
         Runs the greedy algorithm for x iterations.
         """
         for iteration in range(iterations):
             print(f'Iteration {iteration + 1}/{iterations}, current value: {self.score}')
             new_model = copy.deepcopy(self.model)
-            self.make_routes(new_model)
+            self.make_models(new_model)
             self.compare_score(new_model)
-        print(f'Final score: {self.score}')
 
+        print(f'Final score: {self.score}')
         return self.best_model
