@@ -5,7 +5,7 @@ from output.output import output_multiple
 import time
 
 
-best_outputs = 1
+best_outputs = 5
 best_models = []
 iteration_total = 0
 start = time.time()
@@ -15,13 +15,13 @@ for best in range(best_outputs):
     gred = RandomGreedy(model)
 
     start_gred = time.time()
-    while time.time() - start_gred < 600:
+    while time.time() - start_gred < 20:
         best_model = gred.run(1)
         iteration_total += 1
 
     best_models.append(best_model)
 
-output_multiple(best_models, f"experiments/HL_RandomGreedy/RandomGreedy_0")
+output_multiple(best_models, f"experiments/HL_RandomGreedy/RandomGreedy_1")
 
 end = time.time()
 
