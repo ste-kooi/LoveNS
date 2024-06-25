@@ -23,7 +23,7 @@ class Depth_first_all:
             afhankelijk van het model dat is ingeladen
         
         """
-        self.model = model
+        self.model = copy.deepcopy(model)
         self.max_routes = self.model.max_routes
         self.max_time = self.model.max_time
         
@@ -34,13 +34,16 @@ class Depth_first_all:
         self.states = 0
         
         self.used_begin_stations = set()
-        #self.usable_connections = copy.deepcopy(self.model.connections.keys())
 
-    def add_begin_option(self, route, station):
-        new_option = route.copy()
-        new_option.add_station(station)
-        # new_option = route.add_station(station)
-        self.options.append(new_option)
+    def add_begin_option(self, train_id):
+        print("ALL STATIONS")
+        route = Route(train_id)
+        for station in self.model.stations.values():
+            if station in self.used_begin_stations:
+                continue
+            new_option = route.deep_copy_route()
+            new_option.add_station(station)
+            self.options.append(new_option)
     
     def make_children(self, current_route: Route) -> None:
         """
@@ -65,7 +68,7 @@ class Depth_first_all:
             # retrieve station object from station name
             new_station = self.model.stations[station]
             # copy route option, so not all routes are the same
-            route_option = current_route.copy()
+            route_option = current_route.deep_copy_route()
             route_option.add_station(new_station)
             if route_option.duration < 120:
                 self.options.append(route_option)
@@ -81,10 +84,10 @@ class Depth_first_all:
         Calculates the score of the entire model and compares it to best_solution.
         If score is higher the score is saved in best_score
         """
-        score = self.model.calculate_score()
+        score = self.model.calculate_score_bonus()
         if score >= self.best_solution:
             self.best_solution = score
-            print(f"new best score: {self.best_solution}")
+            # print(f"new best score: {self.best_solution}")
             return True
         return False
     
@@ -97,12 +100,9 @@ class Depth_first_all:
         Returns the complete model
         """         
         start = time.time()
+        
         for train_id in range(1, self.max_routes + 1):
-            route = Route(train_id)
-            for station in self.model.stations.values():
-                if station not in self.used_begin_stations:
-                    self.add_begin_option(route, station)
-            
+            self.add_begin_option(train_id)
             self.best_route = self.options[-1]
             
             while self.options:
@@ -127,7 +127,7 @@ class Depth_first_all:
             if len(self.best_route.stations) == 1:
                 self.model.remove_route(self.best_route.train_id)
                 return self.model
-            print(f"*******************1 route af: {end - start}********************")
+            print(f"******************* route {train_id} af: {end - start}********************")
             print(f"*******************states: {self.states}************************")
                 
         return self.model
@@ -152,67 +152,10 @@ class Depth_first_chosen(Depth_first_all):
         for station in one_stations:
             self.begin_stations.append(station)
     
-    def run(self) -> tuple[Model, int, int]: 
-        """
-        Takes a route of the options list as long as there are options. 
-        Checks if route is shorter than max_time
-        If so, makes children, add it to the model and checks score of model
-        Removes route from model and adds the best_route
-        Returns the complete model
-        """         
-        for train_id in range(1, self.max_routes + 1):
-            route = Route(train_id)
-            station = self.begin_stations.pop()
-            self.add_begin_option(route, station)
-            
-            self.best_route = self.options[-1]
-            
-            while self.options:
-                current_route = self.get_next_option()
-                self.states += 1
-            
-                # check if route is within max_time
-                if current_route.duration < self.max_time:
-                    self.make_children(current_route)
-                    # add route to model for score checking
-                    self.model.add_excisting_route(current_route)
-                
-                    if self.check_score():
-                        # if new high score current_route is best_route
-                        self.best_route = current_route
-                    
-                    #remove current_route from model so there is room to add best_route
-                    self.model.remove_route(current_route.train_id)
-                    self.model.add_excisting_route(self.best_route)
-            
-            if len(self.best_route.stations) == 1:
-                self.model.remove_route(self.best_route.train_id)
-                return self.model
-                
-        return self.model
-        
-        
-        # # check if there are still options left
- #        self.best_route = self.options[-1]
- #        while self.options:
- #            current_route = self.get_next_option()
- #            self.states += 1
- #
- #            # check if route is within max_time
- #            if current_route.duration < self.max_time:
- #                self.make_children(current_route)
- #                # add route to model for score checking
- #                self.model.add_excisting_route(current_route)
- #
- #                if self.check_score():
- #                    # if new high score current_route is best_route
- #                    self.best_route = current_route
- #
- #                #remove current_route from model so there is room to add best_route
- #                self.model.remove_route(current_route.train_id)
- #                self.model.add_excisting_route(self.best_route)
- #
- #        if len(self.best_route.stations) == 1:
- #            self.model.remove_route(self.best_route.train_id)
- #
- #        return self.model, self.best_solution, self.states, self.best_route.stations[0]
+    def add_begin_option(self, train_id):
+        print("CHOSEN")
+        route = Route(train_id)
+        station = self.begin_stations.pop()
+        new_option = route.deep_copy_route()
+        new_option.add_station(station)
+        self.options.append(new_option)

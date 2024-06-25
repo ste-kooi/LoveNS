@@ -101,17 +101,7 @@ class Route:
             duration += interconnection.time
         self.duration = duration
 
-    def is_valid(self) -> bool:
-        """
-        Returns if traject duration is below 120 minutes
-        """
-        return self.duration < 120
 
-    def comp_traject(self) -> bool:
-        """
-        Compares valiable trajects to determine best option
-        ."""
-        pass
     def __repr__(self):
         station_names = ' -> '.join([station.name for station in self.stations])
         return f'Route {self.train_id}: {station_names} (Duration: {self.duration} minutes)'

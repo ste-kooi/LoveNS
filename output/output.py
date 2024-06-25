@@ -1,10 +1,11 @@
 from classes.model import Model
 import csv
 
-def output(model: Model):
+def output(model: Model, file_path: str):
     """
     This function generates an output file in csv format.
     It takes values from a model
+    Writes output to file_path.csv
 
     """
 
@@ -26,11 +27,11 @@ def output(model: Model):
     data.append(['score', model.calculate_score()])
 
     # write data to CSV file
-    filename = "output/model_output.csv"
+    filename = f"{file_path}.csv"
     with open(filename, mode='w', newline='') as file:
         writer = csv.writer(file)
         writer.writerows(data)
 
-    print(f"Data has been written to {filename}")
+    print(f"Data has been written to {file_path}.csv")
 
 
