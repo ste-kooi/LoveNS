@@ -32,6 +32,6 @@ def output(model: Model, file_path: str):
         writer = csv.writer(file)
         writer.writerows(data)
 
-    print(f"Data has been written to {file_path}")
+    print(f"Data has been written to {file_path}.csv")
 
 

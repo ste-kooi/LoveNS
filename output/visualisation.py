@@ -47,3 +47,4 @@ def visualise(model: Model, file_path: str):
 
     # display plot
     plt.savefig(f'{file_path}.png', bbox_inches= 'tight', pad_inches=0)
+    print(f"Figure has been saved to {file_path}.png")
