@@ -267,20 +267,6 @@ class Model:
         for route_id in self.routes:
             self.used_connections = self.used_connections.union(self.routes[route_id].interconnections)
 
-    def missed_connections(self):
-        all_connections = set(self.connections.keys())
-        for route in self.routes.values():
-            for interconnection in route.interconnections:
-                connection_id = interconnection.get_id()
-                if connection_id in all_connections:
-                    all_connections.remove(connection_id)
-        # print(all_connections)
-        if all_connections:
-            print("Missed connections:")
-            for connection in all_connections:
-                print(f" * {self.connections[connection]}")
-            print()
-
     def clear_routes(self):
         """
         Empties the routes and used_connections
@@ -298,21 +284,3 @@ class Model:
         new_model.used_connections = set(self.used_connections)
         return new_model
         
-    def interim_overview(self, train_id):
-        print(f"Route {train_id} finished")
-        print(f" - Calculate_score()  : {self.calculate_score()}")
-        print(f" - Coverage           : {self.get_coverage()}")
-        print(f" - Route duration     : {self.routes[train_id].duration}")
-        print(f" - Amount of stations : {len(self.routes[train_id].stations)}")
-        print()
-    
-    def total_overview(self, states, start = 0, end = 0):
-        print("TOTAL OVERVIEW")
-        print(f" - Calculate_score()   : {self.calculate_score()}")
-        print(f" - Coverage            : {self.get_coverage()}")
-        print(f" - Amout routes        : {len(self.routes)}")
-        print(f" - Total time          : {self.total_time()} min")
-        print(f" - States / iterations : {states}")
-        if start != 0:
-            print(f" - Running time        : {end - start}")
-        print()
