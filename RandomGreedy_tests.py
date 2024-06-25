@@ -3,26 +3,35 @@ from classes.model import Model
 from output.output import output_multiple
 
 import time
+import math
 
-start = time.time()
-best_outputs = 3
+
+best_outputs = 5
 best_models = []
+n_runs = 0
 
 for best in range(best_outputs):
     model = Model("Nederland")
     gred = RandomGreedy(model)
-    best_model = gred.run(1000)
+
+    start = time.time()
+    while time.time() - start < 5:
+        best_model = gred.run(1)
+        n_runs += 1
+
     best_models.append(best_model)
 
-output_multiple(best_models, f"experiments/RandomGreedy_0")
+output_multiple(best_models, f"experiments/NL_RandomGreedy/RandomGreedy_0")
 
-end = time.time()
+end2 = time.time()
 
 print(f'Total time: {best_model.total_time()}')
 print(f'Coverage: {best_model.get_coverage()}')
 print(f'Final score: {gred.score}')
-print(f'Runtime: {end - start}')
+print(f'Runtime: {end2 - start}')
 print(f'States: {gred.states}')
-print(f'Iterations used: {gred.iteration_count}')
+print(f'Iterations used: {gred.iteration_count * best_outputs}')
+
+
 
 
