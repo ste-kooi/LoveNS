@@ -6,7 +6,7 @@ from output.visualisation import visualise
 import time
 
 
-best_outputs = 1
+best_outputs = 5
 best_models = []
 iteration_total = 0
 start = time.time()
@@ -22,8 +22,8 @@ for best in range(best_outputs):
 
     best_models.append(best_model)
 
-output_multiple(best_models, f"experiments/NL_RandomGreedy/RandomGreedy_1")
-visualise(best_model, f"experiments/NL_RandomGreedy/RandomGreedy_img1")
+output_multiple(best_models, f"experiments/NL_RandomGreedy/RandomGreedy_2")
+visualise(best_model, f"experiments/NL_RandomGreedy/RandomGreedy_img2")
 
 end = time.time()
 
