@@ -1,27 +1,29 @@
 from algorithms.greedy import RandomGreedy
 from classes.model import Model
 from output.output import output_multiple
+from output.visualisation import visualise
 
 import time
 
 
-best_outputs = 5
+best_outputs = 1
 best_models = []
 iteration_total = 0
 start = time.time()
 
 for best in range(best_outputs):
-    model = Model("Holland")
+    model = Model("Nederland")
     gred = RandomGreedy(model)
 
     start_gred = time.time()
-    while time.time() - start_gred < 20:
+    while time.time() - start_gred < 600:
         best_model = gred.run(1)
         iteration_total += 1
 
     best_models.append(best_model)
 
-output_multiple(best_models, f"experiments/HL_RandomGreedy/RandomGreedy_1")
+output_multiple(best_models, f"experiments/NL_RandomGreedy/RandomGreedy_1")
+visualise(best_model, f"experiments/NL_RandomGreedy/RandomGreedy_img1")
 
 end = time.time()
 
