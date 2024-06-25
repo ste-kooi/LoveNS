@@ -11,7 +11,7 @@ iteration_total = 0
 start = time.time()
 
 for best in range(best_outputs):
-    model = Model("Nederland")
+    model = Model("Holland")
     gred = RandomGreedy(model)
 
     start_gred = time.time()
@@ -21,7 +21,7 @@ for best in range(best_outputs):
 
     best_models.append(best_model)
 
-output_multiple(best_models, f"experiments/NL_RandomGreedy/RandomGreedy_0")
+output_multiple(best_models, f"experiments/HL_RandomGreedy/RandomGreedy_0")
 
 end = time.time()
 
