@@ -4,6 +4,7 @@ from classes.model import Model
 from classes.station import Station
 from classes.route import Route
 from classes.connection import Connection
+from output.terminal_output import interim_overview, total_overview, missed_connections
 
 
 class Depth_first_all:
@@ -79,19 +80,22 @@ class Depth_first_all:
         """
         return self.options.pop()
     
-    def check_score(self) -> bool:
+    def check_score(self, coverage: bool) -> bool:
         """
         Calculates the score of the entire model and compares it to best_solution.
         If score is higher the score is saved in best_score
         """
-        score = self.model.calculate_score_bonus()
+        if coverage:
+            score = self.model.calculate_score_bonus()
+        else:
+            score = self.model.calculate_score()
+        
         if score >= self.best_solution:
             self.best_solution = score
-            # print(f"new best score: {self.best_solution}")
             return True
         return False
     
-    def run(self) -> tuple[Model, int, int]: 
+    def run(self, coverage = False) -> tuple[Model, int, int]: 
         """
         Takes a route of the options list as long as there are options. 
         Checks if route is shorter than max_time
@@ -99,7 +103,7 @@ class Depth_first_all:
         Removes route from model and adds the best_route
         Returns the complete model
         """         
-        start = time.time()
+        self.start = time.time()
         
         for train_id in range(1, self.max_routes + 1):
             self.add_begin_option(train_id)
@@ -115,21 +119,26 @@ class Depth_first_all:
                     # add route to model for score checking
                     self.model.add_excisting_route(current_route)
                 
-                    if self.check_score():
+                    if self.check_score(coverage):
                         # if new high score current_route is best_route
                         self.best_route = current_route
                     
                     #remove current_route from model so there is room to add best_route
                     self.model.remove_route(current_route.train_id)
                     self.model.add_excisting_route(self.best_route)
-                    end = time.time()
+                    self.end = time.time()
+            interim_overview(self.model, train_id)
             
             if len(self.best_route.stations) == 1:
                 self.model.remove_route(self.best_route.train_id)
+                print(f"Deleted route {train_id}")
+                print()
+                total_overview(self.model, self.states, self.start, self.end)
+                missed_connections(self.model)
                 return self.model
-            print(f"******************* route {train_id} af: {end - start}********************")
-            print(f"*******************states: {self.states}************************")
                 
+        total_overview(self.model, self.states, self.start, self.end)
+        missed_connections(self.model)
         return self.model
 
 class Depth_first_chosen(Depth_first_all):
