@@ -3,7 +3,7 @@ from algorithms.randomise import random_routes
 from classes.model import Model
 
 if __name__ == "__main__":
-    model = Model("Holland")
+    model = Model("Nederland")
     gred = Greedy(model)
-    gred.make_route(model)
+    gred.run(10)
 
