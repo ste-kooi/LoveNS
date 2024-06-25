@@ -214,6 +214,32 @@ class Model:
         T = len(self.routes)
         p = self.get_coverage()
         Min = self.total_time()
+        
+        return p * 10000 - (T * 100 + Min)
+        
+    def calculate_score_bonus(self) -> float:
+        """
+        This function calculates a K score from the model following the formula:
+
+        K = p * 1000 - (T * 100 + Min)
+
+        K:   quality of route planning
+        p:   fraction of covered connections
+        T:   number of routes
+        Min: total minutes of routes
+        
+        If the coverage is 1, the score will be given a bonus of 100 points
+
+        Returns:
+            float: K score of the model
+
+        """
+        T = len(self.routes)
+        p = self.get_coverage()
+        Min = self.total_time()
+        
+        if p > 0.99:
+            return (p * 10000 - (T * 100 + Min)) + 100
         return p * 10000 - (T * 100 + Min)
 
 
