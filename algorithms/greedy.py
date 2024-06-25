@@ -14,6 +14,7 @@ class RandomGreedy:
         self.score: int = self.model.calculate_score()
         self.best_model: Model = copy.deepcopy(self.model)
         self.route_id: int = 0
+        self.states: int = 0
 
     def make_route(self, new_model: Model, used_starting_stations: Set[str]) -> None:
         """
@@ -51,6 +52,8 @@ class RandomGreedy:
             used_connections.add(best_connection)
             new_model.routes[self.route_id].add_station(new_station)
             new_model.routes[self.route_id].refresh_duration()
+
+            self.states += 1
 
             if new_model.routes[self.route_id].duration >= new_model.max_time:
                 new_model.routes[self.route_id].remove_last_station()
@@ -96,4 +99,5 @@ class RandomGreedy:
             self.compare_score(new_model)
 
         print(f'Final score: {self.score}')
+        print(f"Final state count: {self.states}")
         return self.best_model
