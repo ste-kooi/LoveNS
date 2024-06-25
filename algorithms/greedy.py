@@ -15,6 +15,7 @@ class RandomGreedy:
         self.best_model: Model = copy.deepcopy(self.model)
         self.route_id: int = 0
         self.states: int = 0
+        self.iteration_count: int = 0
 
     def make_route(self, new_model: Model, used_starting_stations: Set[str]) -> None:
         """
@@ -94,10 +95,9 @@ class RandomGreedy:
         """
         for iteration in range(iterations):
             print(f'Iteration {iteration + 1}/{iterations}, current value: {self.score}')
+            self.iteration_count += 1
             new_model = copy.deepcopy(self.model)
             self.make_models(new_model)
             self.compare_score(new_model)
 
-        print(f'Final score: {self.score}')
-        print(f"Final state count: {self.states}")
         return self.best_model
