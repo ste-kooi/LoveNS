@@ -102,17 +102,17 @@ Lastly, the `run` method executes the `make_model` method for a specified number
  - `--rg`, `--randomgreedy`: Uses the RandomGreedy algorithm.
 
 
-**Depth First**
-<u>Constructive algorithm</u>
+**Depth First** \n
+<u>Constructive algorithm</u> \n
 The depth-first (DF) algorithm is designed to explore route options systematically and improve the train routing solution based on the scoring function, making it suitable for optimizing train schedules within the given constraints. The DF algorithm’s systematic approach ensures that all possible routes are considered, allowing for a complete exploration of potential solutions to the train routing problem.
 
 The DF algorithm takes the most recent route from a stack and explores its possible route options. For this route, it identifies all possible connections from the last station in the route. If the new connection has not been used in the route and the duration of the route is within the allowed limit, the new route is pushed onto the stack.
 
 Two variants of the DF algorithm are implemented in this repository:
-<u>Depth first all (DFA) algorithm</u>
+`Depth first all (DFA) algorithm`
 This algorithm is designed to explore all possible starting stations for each route. It creates initial route options by iterating over all stations and adding them to the stack as beginning station if they haven't been used before.
 
-<u>Depth first chosen (DFC) algorithm</u>
+`Depth first chosen (DFC) algorithm`
 This algorithm takes a strategic approach, by pre-selecting the starting stations. It pre-selects starting stations based on the number of connections a station holds. At first the stations with only one connection are used as a beginning station. After all stations with one connection are used, the stations with the most connections are used.
 
 An additional feature has been added to enable users to emphasize coverage more within the DFA and DFC algorithms. This enhancement involves implementing a modified scoring function to evaluate route quality. Specifically, if a route achieves 100% coverage of all connections, it receives a bonus of 100 points. The regular score will still be displayed in the output.
@@ -126,9 +126,9 @@ The DFA exhibits several biases:
 
 <u>Command lines</u>
 
- - **dfa**, **--depthfall**' : runs the depth first all stations algorithm
- - **dfc**, **--depthfchosen**' : runs the depth first chosen stations algorithm
- - **cov**, **--depthfcov** : add cov to command line along with dfa or dfc to emphasise coverage
+ - `**dfa**`, `**--depthfall**` : runs the depth first all stations algorithm
+ - `**dfc**`, `**--depthfchosen**` : runs the depth first chosen stations algorithm
+ - `**cov**`, `**--depthfcov**` : add cov to command line along with dfa or dfc to emphasise coverage
 
 **Hill Climber**
 Iterative algorithm
