@@ -48,10 +48,10 @@ if __name__ == "__main__":
     elif args.hillclimber:
         hc = HillClimber(model)
         hc.run(iterations)
-    elif args.depthfcoverage and args.depthfall:
+    elif args.depthfcov and args.depthfall:
         cov_a = Depth_first_all(model)
         new_model = cov_a.run(True)
-    elif args.depthfcoverage and args.depthfchosen:
+    elif args.depthfcov and args.depthfchosen:
         cov_c = Depth_first_chosen(model)
         new_model = cov_c.run(True)
     elif args.depthfall:
