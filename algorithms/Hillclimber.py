@@ -151,7 +151,7 @@ class HillClimber:
             self.check_score(new_model)
 
         if reorder:
-            self.reorder_routes(reorder)
+            self.reorder_routes(verbose)
 
     def reorder_routes(self, verbose=False):
         """
