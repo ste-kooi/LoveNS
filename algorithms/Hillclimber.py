@@ -77,11 +77,11 @@ class HillClimber:
         if len(new_model.routes) < 2:
             return
         random_route_id = random.choice(list(new_model.routes))
-        for _ in range(random.randint(1, 3)):
+        for _ in range(random.randint(1, 4)):
             new_model.get_route(random_route_id).remove_last_station()
 
         random_route_id_2 = random.choice(list(new_model.routes))
-        for _ in range(random.randint(1, 3)):
+        for _ in range(random.randint(1, 4)):
             new_model.get_route(random_route_id_2).remove_last_station()
 
         new_model.update_used_connections()
@@ -154,7 +154,7 @@ class HillClimber:
             self.reorder_routes(verbose)
 
     def reorder_routes(self, verbose=False):
-        """
+        """meth
         Reorders all routes in the model for additional optimization.
 
         Parameters
