@@ -29,9 +29,8 @@ def main():
     parser.add_argument('-cov', '--depthfcov', help="Uses the depth first but gets more coverage.", action="store_true")
     parser.add_argument('-r', '--random', help="Uses the random algorithm.", action="store_true")
 
-    # choose experiment.
-    parser.add_argument('-dfexp', '--dfexperiments', help="Provides one of the pre made experiments for the depth first algorithm.",nargs='?', default=0, type=int, choices=[1,2,3,4,5,6,7,8])
-
+    #choose experiment.
+    parser.add_argument('-dfexp', '--dfexperiments', help="Provides one of the pre made experiments for the depth first algorithm.",nargs='?', default=1, type=int, choices=[1,2,3,4,5,6,7,8,9,10,11,12])
     parser.add_argument('-hmf', '--hcmethodfreq', help='Runs hillclimbers with unique mix of method frequencies', nargs=2, metavar=('iterations', 'amount'), type=int)
 
     # choose the number of iterations.
@@ -110,21 +109,30 @@ def main():
 
 def run_df_experiment(dfexp, experiment_number):
     if experiment_number == 1:
-        dfexp.one_all_stations()
+        dfexp.df_experiment1()
     elif experiment_number == 2:
-        dfexp.twice_all_stations()
+        dfexp.df_experiment2()
     elif experiment_number == 3:
-        dfexp.trice_all_stations()
+        dfexp.df_experiment3()
     elif experiment_number == 4:
-        dfexp.one_chosen_stations()
+        dfexp.df_experiment4()
     elif experiment_number == 5:
-        dfexp.twice_chosen_stations()
+        dfexp.df_experiment5()
     elif experiment_number == 6:
-        dfexp.trice_chosen_stations()
+        dfexp.df_experiment6()
     elif experiment_number == 7:
-        dfexp.comb_chosen_all_stations()
+        dfexp.df_experiment7()
     elif experiment_number == 8:
-        dfexp.comb_all_chosen_stations()
+        dfexp.df_experiment8()
+    elif experiment_number == 9:
+        dfexp.df_experiment9()
+    elif experiment_number == 10:
+        dfexp.df_experiment10()
+    elif experiment_number == 11:
+        dfexp.df_experiment11()
+    elif experiment_number == 12:
+        dfexp.df_experiment12()
+
 
 if __name__ == '__main__':
     main()
