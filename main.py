@@ -23,7 +23,7 @@ parser.add_argument('-cov', '--depthfcov', help="Uses the depth first but gets m
 parser.add_argument('-r', '--random', help="Uses the random algorithm.", action="store_true")
 
 #choose experiment.
-parser.add_argument('-dfexp', '--dfexperiments', help="Provides one of the pre made experiments for the depth first algorithm.",nargs='?', default=1, type=int, choices=[1,2,3,4,5,6,7,8])
+parser.add_argument('-dfexp', '--dfexperiments', help="Provides one of the pre made experiments for the depth first algorithm.",nargs='?', default=1, type=int, choices=[1,2,3,4,5,6,7,8,9,10,11,12])
 
 #choose the iteration amount.
 parser.add_argument('iteration', help='amount of iterations used for the chosen algorithm', nargs='?', default=1000, type=int)
@@ -67,21 +67,30 @@ if __name__ == "__main__":
         print(rndm_score)
 
     if args.dfexperiments == 1:
-        dfexp.one_all_stations()
+        dfexp.df_experiment1()
     elif args.dfexperiments == 2:
-        dfexp.twice_all_stations()
+        dfexp.df_experiment2()
     elif args.dfexperiments == 3:
-        dfexp.trice_all_stations()
+        dfexp.df_experiment3()
     elif args.dfexperiments == 4:
-        dfexp.one_chosen_stations()
+        dfexp.df_experiment4()
     elif args.dfexperiments == 5:
-        dfexp.twice_chosen_stations()
+        dfexp.df_experiment5()
     elif args.dfexperiments == 6:
-        dfexp.trice_chosen_stations()
+        dfexp.df_experiment6()
     elif args.dfexperiments == 7:
-        dfexp.comb_chosen_all_stations()
+        dfexp.df_experiment7()
     elif args.dfexperiments == 8:
-        dfexp.comb_all_chosen_stations()
+        dfexp.df_experiment8()
+    elif args.dfexperiments == 9:
+        dfexp.df_experiment9()
+    elif args.dfexperiments == 10:
+        dfexp.df_experiment10()
+    elif args.dfexperiments == 11:
+        dfexp.df_experiment11()
+    elif args.dfexperiments == 12:
+        dfexp.df_experiment12()
+        
 
 
 
