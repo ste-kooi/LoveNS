@@ -7,6 +7,7 @@ from algorithms.depth_first import Depth_first_all, Depth_first_chosen
 from classes.model import Model
 from experiments.depth_first_experiments import DF_experiment
 from experiments.method_ratio import HillclimberMethodFrequencies
+from experiments.baseline import Baseline
 
 from output.output import output
 from output.visualisation import visualise
@@ -30,8 +31,9 @@ def main():
     parser.add_argument('-r', '--random', help="Uses the random algorithm.", action="store_true")
 
     #choose experiment.
-    parser.add_argument('-dfexp', '--dfexperiments', help="Provides one of the pre made experiments for the depth first algorithm.",nargs='?', default=1, type=int, choices=[1,2,3,4,5,6,7,8,9,10,11,12])
+    parser.add_argument('-dfexp', '--dfexperiments', help="Provides one of the pre made experiments for the depth first algorithm.",nargs='?', default=0, type=int, choices=[1,2,3,4,5,6,7,8,9,10,11,12])
     parser.add_argument('-hmf', '--hcmethodfreq', help='Runs hillclimbers with unique mix of method frequencies', nargs=2, metavar=('iterations', 'amount'), type=int)
+    parser.add_argument('-bl', '--baseline', help='Runs a baseline for a model, plotting the scores of the generated models', nargs=1, metavar=('iterations'), type=int)
 
     # choose the number of iterations.
     parser.add_argument('iteration', help='amount of iterations used for the chosen algorithm', nargs='?', default=1000, type=int)
@@ -90,6 +92,10 @@ def main():
     elif args.depthfall:
         dfa = Depth_first_all(model)
         new_model = dfa.run()
+    elif args.baseline:
+        bl = Baseline(model, iterations)
+        bl.run()
+        bl.plot_distribution()
     elif args.depthfchosen:
         dfc = Depth_first_chosen(model)
         new_model = dfc.run()
