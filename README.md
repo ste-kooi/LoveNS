@@ -80,11 +80,10 @@ To run the algorithms and experiments, you can combine the map size argument wit
 ### Algortihms
 **Random**
 <u>Consttructive algorithm</u>
-Generates random routes
+In **/algorithms/randomise.py** the `random_routes` function is found. This function generates random routes for a model starting at stations that still have an unused connection to another station
 <u>Command lines</u>
 
- - bla die bla
- - bla die bla
+ **--r**, **--random** Uses random_routes to generate a random model
 
 **Random Greedy**
 <u>Constructive algorithm</u>
@@ -146,6 +145,9 @@ A normal hillclimber randomly picks between the adjustment using even ratios. Th
  - **-v**, **--verbose** : If verbose is called every iteration and its score is now printed.
  - **-ro**, **--reorder** : Ends a hillclimber run with randomly reordering every route 500 times and saves improvements.
 
+    Example: To run a hillclimber of the Holland region 500 times while printing every iteration and reordering the routes at the end call: `main.py -hl -hc 500 -v -ro`
+
+
 
 ### Experiments
 **Baseline - random algorithm**
@@ -183,9 +185,14 @@ Experiment **12** runs a DFC algorithm in the first iteration and a DFA algorith
 
 **Hill Climber experiments**
 
+Hillclimber method frequencies experiment is looking for the best combination of adjustment methods a hillclimber can use. It runs for a given amount of iterations and uses a specific number of different randomly generated frequency combinations.
+The `generate_frequencies` method returns a list of 4 ints in range 0,6 inclusive. Models are run and the output is saved to /experiments/data. If more than 10 frequencies are used the experiment plots a figure with the best 3, worst and a sample of 6 random middling hillclimbers. The used frequencies are shown.
 
 <u>Command lines</u>
 
- - bla die bla
- - bla die bla
+ - **-hmf**, **--hcmethodfreq** : runs a number of hillclimbers with different method frequencies
+ - **iterations** : runs the hillclimber algorithm for the given iterations, default set to 1000
+ - **amount** : the number of different frequencies that are generated
+
+ example usage: `-nl -hmf 100_000 25` runs 25 different hillclimbers for 100_000 iterations
 
