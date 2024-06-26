@@ -79,6 +79,7 @@ To run the algorithms and experiments, you can combine the map size argument wit
 
 ### Algortihms
 **Random**    
+<u>Consttructive algorithm</u>
 Generates random routes
 <u>Command lines</u>
 
@@ -86,7 +87,7 @@ Generates random routes
  - bla die bla
 
 **Random Greedy**   
-Constructive algorithm  
+<u>Constructive algorithm</u>  
 Generates routes op basis van de korste tijd tussen connecties
 <u>Command lines</u>
 
@@ -94,14 +95,32 @@ Generates routes op basis van de korste tijd tussen connecties
  - bla die bla
 
 **Depth First**   
-Constructive algorithm   
-Generates routes op basis van de beste score per volledige route, waarbij hij alle mogelijke routes af gaat
+<u>Constructive algorithm</u>   
+The depth-first (DF) algorithm is designed to explore route options systematically and improve the train routing solution based on the scoring function, making it suitable for optimizing train schedules within the given constraints. The DF algorithm’s systematic approach ensures that all possible routes are considered, allowing for a complete exploration of potential solutions to the train routing problem.
+
+The DF algorithm takes the most recent route from a stack and explores its possible route options. For this route, it identifies all possible connections from the last station in the route. If the new connection has not been used in the route and the duration of the route is within the allowed limit, the new route is pushed onto the stack.   
+
+Two variants of the DF algorithm are implemented in this repository:   
+<u>Depth first all (DFA) algorithm</u>   
+This algorithm is designed to explore all possible starting stations for each route. It creates initial route options by iterating over all stations and adding them to the stack as beginning station if they haven't been used before.
+
+<u>Depth first chosen (DFC) algorithm</u>   
+This algorithm takes a strategic approach, by pre-selecting the starting stations. It pre-selects starting stations based on the number of connections a station holds. At first the stations with only one connection are used as a beginning station. After all stations with one connection are used, the stations with the most connections are used.
+
+An additional feature has been added to enable users to emphasize coverage more within the DFA and DFC algorithms. This enhancement involves implementing a modified scoring function to evaluate route quality. Specifically, if a route achieves 100% coverage of all connections, it receives a bonus of 100 points. The regular score will still be displayed in the output. 
+
+<u>Bias</u>  
+The DFA exhibits several biases:    
+
+- It constructs train routes one at a time, rather than considering all routes simultaneously. Because of this, it is possible that the most optimal solution will not be achieved.    
+- Another bias lies in the validation of new route options. The algorithm it is not allowed to use a connection more than once within a single route. Therefore, there is no guarantee that the most optimal solution will be generated.
+- Both the DFA and DFC algorithms exhibit bias by potentially overlooking more optimal starting stations.
 
 <u>Command lines</u>
 
  - **dfa**, **--depthfall**' : runs the depth first all stations algorithm
  - **dfc**, **--depthfchosen**' : runs the depth first chosen stations algorithm
- - **cov**, **--depthfcov** : add cov to command line along with dfa or dfc to create a little more emphasis to getting 100% coverage of the tracks.
+ - **cov**, **--depthfcov** : add cov to command line along with dfa or dfc to emphasise coverage
 
 **Hill Climber**   
 Iterative algorithm   
