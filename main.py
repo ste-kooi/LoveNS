@@ -11,11 +11,11 @@ from experiments.baseline import Baseline
 
 from output.output import output
 from output.visualisation import visualise
-import pandas
+
 import argparse
 
 def main():
-    print(pandas.__version__)
+
     parser = argparse.ArgumentParser()
 
     # choose which spectrum the algortihms should work on.
