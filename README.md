@@ -132,12 +132,20 @@ The DFA exhibits several biases:
 
 **Hill Climber**
 Iterative algorithm
-Generates routes
+Hillclimber is an algorithm that optimizes a route by making a change to the model and keeping that change if it increases the model's k-score. Hillclimber algorithm must be initialised with a completed model. For a given number of iterations hillclimber randomly makes an adjustment. These adjustments can be: `mutate_single_route`, this deletes all stations from a route and fills the route with new stations with the `random_recondigure_route` function; `mutate_end_of_routes`, this removes 1 to 4 stations from the end of 2 routes. Then will only extend one route using `random_extend_route`. If the deletions lead to an empty route a new route is generated with `random_single_route`; `delete_routes` randomly removes 2 routes and generates a new route using `random_single_route`; `reorder_single_route`, reorders the route with `random_reorder_route`.
+
+A normal hillclimber randomly picks between the adjustment using even ratios. The ratios can be customised by initializing a Hillclimber with a method_frequencies argument: `Hillclimber(model, methodfrequencies)` the method frequencies must be a list of 4 integers and correspont with `mutate_single_route, mutate_end_of_routes, delete_routes, `reorder_single_route` respectively. If no argument is parsed the default 1:1:1:1 ratio is used.
 
 <u>Command lines</u>
 
- - bla die bla
- - bla die bla
+ - **-hc**, **--hillclimber** : runs the hillclimber algorithm
+ - **iterations** : runs the hillclimber algorithm for the given iterations, default set to 1000
+ - **-freq**, **--frequencies** : sets the method frequencies example usage: `-nl -hc -freq 2 1 3 1`
+
+ Flags
+ - **-v**, **--verbose** : If verbose is called every iteration and its score is now printed.
+ - **-ro**, **--reorder** : Ends a hillclimber run with randomly reordering every route 500 times and saves improvements.
+
 
 ### Experiments
 **Baseline - random algorithm**
@@ -174,7 +182,7 @@ Experiment **12** runs a DFC algorithm in the first iteration and a DFA algorith
  - For example: **-dfexp 2**
 
 **Hill Climber experiments**
-bla die bla
+
 
 <u>Command lines</u>
 
