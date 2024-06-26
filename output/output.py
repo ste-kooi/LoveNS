@@ -1,7 +1,7 @@
 from classes.model import Model
 import csv
 
-def output(model: Model, file_path: str):
+def output(model: Model, file_path: str, states = 0, start = 0, end = 0):
     """
     This function generates an output file in csv format.
     It takes values from a model
@@ -24,8 +24,16 @@ def output(model: Model, file_path: str):
 
 
     # footer of the table contains the score of the model
+    data.append([])
     data.append(['score', model.calculate_score()])
-
+    data.append(['coverage', model.get_coverage()])
+    data.append(['total time', model.total_time()])
+    if states > 0:
+        data.append(['states', states])
+    if start != 0:
+        data.append(['running time', end - start])
+    
+    
     # write data to CSV file
     filename = f"{file_path}.csv"
     with open(filename, mode='w', newline='') as file:

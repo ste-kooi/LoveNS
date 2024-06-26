@@ -1,8 +1,10 @@
 from algorithms.greedy import RandomGreedy
+from algorithms.greedy import RandomGreedy
 from algorithms.randomise import random_routes
 from algorithms.Hillclimber import HillClimber
 from algorithms.depth_first import Depth_first_all, Depth_first_chosen
 from classes.model import Model
+from experiments.depth_first_experiments import DF_experiment
 
 import argparse
 
