@@ -10,7 +10,7 @@ def output(model: Model, file_path: str, states = 0, start = 0, end = 0):
     """
 
     # Initiate data list of lists with a header
-    data = [['train', 'stations']]
+    data = [['train', 'stations', 'route duration']]
 
 
     # get all routes from the model
@@ -19,7 +19,7 @@ def output(model: Model, file_path: str, states = 0, start = 0, end = 0):
         stations = [station.name for station in route.stations]
         # Format the list to omit quotation marks
         stations_str = f"[{', '.join(stations)}]"
-        data.append([f'train_{id_counter}', stations_str])
+        data.append([f'train_{id_counter}', stations_str, route.duration])
         id_counter += 1
 
 
