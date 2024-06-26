@@ -1,9 +1,17 @@
-from algorithms.greedy import Greedy
+from algorithms.greedy import RandomGreedy
 from algorithms.randomise import random_routes
+from algorithms.Hillclimber import HillClimber
 from classes.model import Model
 
-if __name__ == "__main__":
-    model = Model("Nederland")
-    gred = Greedy(model)
-    gred.run(10)
+import argparse
+
+parser = argparse.ArgumentParser()
+parser.add_argument('randomgreedy', help= 'uses the RandomGreedy algorithm', type=str)
+
+args: argparse.Namespace= parser.parse_args()
+
+print(args.randomgreedy)
+
+
+
 
