@@ -267,7 +267,6 @@ class Model:
         for route_id in self.routes:
             self.used_connections = self.used_connections.union(self.routes[route_id].interconnections)
 
-
     def clear_routes(self):
         """
         Empties the routes and used_connections
@@ -284,5 +283,4 @@ class Model:
         new_model.routes = {route_id: route.deep_copy_route() for route_id, route in self.routes.items()}
         new_model.used_connections = set(self.used_connections)
         return new_model
-
-
+        
