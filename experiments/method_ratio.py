@@ -1,5 +1,5 @@
 from classes.model import Model
-from algorithms.randomise import random_routes_2
+from algorithms.randomise import random_routes
 from algorithms.Hillclimber import HillClimber
 import numpy as np
 import pandas as pd
@@ -86,8 +86,8 @@ class HillclimberMethodFrequencies:
         plt.legend()
         plt.grid(True)
 
-        plt.savefig(f'experiments/{file_name}.png')
-        print(f"Figure has been saved to experiments/{file_name}.png")
+        plt.savefig(f'experiments/data/{file_name}.png')
+        print(f"Figure has been saved to experiments/data/{file_name}.png")
 
     def plot_selected_models(self, score_data: list[list[int]], freq_data: list[list[int]], model_data: list[Model], file_name: str) -> None:
         """
@@ -131,8 +131,8 @@ class HillclimberMethodFrequencies:
         plt.legend()
         plt.grid(True)
 
-        plt.savefig(f'experiments/{file_name}.png')
-        print(f"Figure has been saved to experiments/{file_name}.png")
+        plt.savefig(f'experiments/data/{file_name}.png')
+        print(f"Figure has been saved to experiments/data/{file_name}.png")
 
 
     def run(self, iterations: int, amount: int) -> None:
@@ -151,7 +151,7 @@ class HillclimberMethodFrequencies:
         model_data = []
 
         # fill the model with routes
-        random_routes_2(self.model, self.model.max_routes)
+        random_routes(self.model, self.model.max_routes)
 
         for i in range(self.amount):
             model_copy = copy.deepcopy(self.model)
@@ -159,7 +159,6 @@ class HillclimberMethodFrequencies:
             score_data.append(scores)
             freq_data.append(frequencies)
             model_data.append(copy.deepcopy(hc_model))
-
 
         # plot and save data
         file_name = str(input('Enter file name: '))

@@ -149,12 +149,29 @@ bla die bla
  - bla die bla
 
 **Depth First experiments**
-bla die bla
+All DF experiment data can be found in output/data/df.
+The naming of the files consists of the mapsize, experiment, algorithm, iteration.
+For example experiment 2 generates: **hl\_exp2\_dfa\_first** and **hl\_exp2\_dfa\_second**
+
+Experiments **1**, **2** and **3** are experiments with respectively one, two or three iterations of the DFA algorithm.
+
+Experiments **4**, **5** and **6** are experiments with respectively one, two or three iterations of the DFC algorithm.
+
+Experiment **7**, **9** and **10** run a DFC algorithm in the first iteration and a DFA in the second, using the generated model from the first iteration. Experiment 9 uses the coverage bonus on both iterations. Experiment 10 uses the coverage bonus only on the second iteration.
+
+Experiment **8** runs a DFA algorithm in the first iteration and a DFC in the second, using the generated model from the first iteration.
+
+Experiment **11** runs a DFC algortihm in the first iteration and a DFA algorithm with coverage bonus in the second and third iteration.
+
+Experiment **12** runs a DFC algorithm in the first iteration and a DFA algorithm in the second and third iteration.
 
 <u>Command lines</u>
 
  - '**-dfexp**', '**--dfexperiments**':
  - bla die bla
+ - **-dfexp** or **--dfexperiments**
+ - In combination with the experiment **number**
+ - For example: **-dfexp 2**
 
 **Hill Climber experiments**
 bla die bla

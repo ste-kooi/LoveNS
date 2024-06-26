@@ -5,6 +5,7 @@ import copy
 def random_routes(model: Model, amount):
     """
     Generates a specific amount of random routes for the model.
+    A route will not start at a station that is already connected in all directions.
 
     Parameters
     ---------
@@ -16,8 +17,13 @@ def random_routes(model: Model, amount):
     """
     for route_id in range(1, amount + 1):
 
-        # pick a random starting station
-        current_station = random.choice(list(model.stations.values()))
+        # Check if there are any stations with unused connections
+        stations_with_unused_connections = model.get_stations_unused_connections()
+        if not stations_with_unused_connections:
+            break
+
+        # pick a starting station
+        current_station = model.stations[random.choice(stations_with_unused_connections)]
         random_single_route(model, current_station, route_id)
 
 
