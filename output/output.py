@@ -1,7 +1,7 @@
 from classes.model import Model
 import csv
 
-def output(model: Model, file_path: str, states = 0, start = 0, end = 0):
+def output(model: Model, file_path: str):
     """
     This function generates an output file in csv format.
     It takes values from a model
@@ -10,7 +10,7 @@ def output(model: Model, file_path: str, states = 0, start = 0, end = 0):
     """
 
     # Initiate data list of lists with a header
-    data = [['train', 'stations', 'route duration']]
+    data = [['train', 'stations']]
 
 
     # get all routes from the model
@@ -19,20 +19,13 @@ def output(model: Model, file_path: str, states = 0, start = 0, end = 0):
         stations = [station.name for station in route.stations]
         # Format the list to omit quotation marks
         stations_str = f"[{', '.join(stations)}]"
-        data.append([f'train_{id_counter}', stations_str, route.duration])
+        data.append([f'train_{id_counter}', stations_str])
         id_counter += 1
 
 
     # footer of the table contains the score of the model
     data.append([])
     data.append(['score', model.calculate_score()])
-    data.append(['coverage', model.get_coverage()])
-    data.append(['total time', model.total_time()])
-    if states > 0:
-        data.append(['states', states])
-    if start != 0:
-        data.append(['running time', end - start])
-    
     
     # write data to CSV file
     filename = f"{file_path}.csv"
