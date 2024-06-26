@@ -14,6 +14,8 @@ class Depth_first_all:
         Max_time is dependent of the given model and determines the maximum length of the routes.
         Options holds all of the possible options for the route.
         Best_solution holds the calculated score
+        states holds amout of tested options
+        used_begin_station holds all the stations that have been used as a begin station
         
         PARAMETERS
         -----------
@@ -36,7 +38,16 @@ class Depth_first_all:
         
         self.used_begin_stations = set()
 
-    def add_begin_option(self, train_id):
+    def add_begin_option(self, train_id: int) -> None:
+        """
+        Adds a beginning of a route to the self.options list
+        
+        PARAMETERS
+        ------------
+        train_id: int
+            train_id is the id of the current route to be made
+        
+        """
         print("ALL STATIONS")
         route = Route(train_id)
         for station in self.model.stations.values():
@@ -84,6 +95,11 @@ class Depth_first_all:
         """
         Calculates the score of the entire model and compares it to best_solution.
         If score is higher the score is saved in best_score
+        
+        PARAMETERS
+        -----------
+        Coverage: bool
+            a bool given by run(). If True calculate a coverage bonus
         """
         if coverage:
             score = self.model.calculate_score_bonus()
@@ -95,13 +111,18 @@ class Depth_first_all:
             return True
         return False
     
-    def run(self, coverage = False) -> tuple[Model, int, int]: 
+    def run(self, coverage = False) -> Model: 
         """
         Takes a route of the options list as long as there are options. 
         Checks if route is shorter than max_time
         If so, makes children, add it to the model and checks score of model
         Removes route from model and adds the best_route
         Returns the complete model
+        
+        PARAMETERS
+        -----------
+        coverage: bool
+            By default False. But can be turned on if user wants a coverage bonus
         """         
         self.start = time.time()
         
@@ -129,6 +150,7 @@ class Depth_first_all:
                     self.end = time.time()
             interim_overview(self.model, train_id)
             
+            # remove unused routes and end loop for this train_id
             if len(self.best_route.stations) == 1:
                 self.model.remove_route(self.best_route.train_id)
                 print(f"Deleted route {train_id}")
@@ -142,26 +164,42 @@ class Depth_first_all:
         return self.model
 
 class Depth_first_chosen(Depth_first_all):
-    def __init__(self, model):
+    def __init__(self, model: Model) -> None:
+        """
+        Initialises the depth_first_all __init__() first and then adds begin_stations
+        Begin_stations holds the stations that are chosen to be the beginning stations of the routes
+        """
         super().__init__(model, score = 0)
         self.begin_stations = []
         self.load_begin_stations()
     
-    def load_begin_stations(self):
+    def load_begin_stations(self) -> None:
+        """
+        Makes a list with station with one connection. Afterwards appends all the stations with amount
+        of connections in ascending order to self.begin_stations. Afterwards appends the one_stations 
+        to self.begin_stations. 
+        """
+        # collect all stations with one connnection
         one_stations = []
         for station in self.model.stations.values():
             if len(station.get_connections()) == 1:
                 one_stations.append(station)
         
+        # sort all other stations
         for connection_count in range(3, 10):
             for station in self.model.stations.values():
                 if len(station.get_connections()) == connection_count:
                     self.begin_stations.append(station)
 
+        # add one_stations to self.begin_stations
         for station in one_stations:
             self.begin_stations.append(station)
     
-    def add_begin_option(self, train_id):
+    def add_begin_option(self, train_id: int) -> None:
+        """
+        Adds the one begin station from self.begin_station to self.options for route with corresponding 
+        train_id
+        """
         print("CHOSEN")
         route = Route(train_id)
         station = self.begin_stations.pop()
