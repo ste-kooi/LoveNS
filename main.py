@@ -30,6 +30,7 @@ parser.add_argument('iteration', help='amount of iterations used for the chosen 
 
 args: argparse.Namespace= parser.parse_args()
 
+# map size
 if args.nederland:
     model = Model("Nederland")
     filename = "Nederland"
@@ -66,6 +67,7 @@ if __name__ == "__main__":
         print(model.routes)
         print(rndm_score)
 
+# DF experiments
     if args.dfexperiments == 1:
         dfexp.df_experiment1()
     elif args.dfexperiments == 2:
