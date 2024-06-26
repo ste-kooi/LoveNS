@@ -21,7 +21,8 @@ parser.add_argument('-dfa', '--depthfall', help="Uses the depth first all algori
 parser.add_argument('-dfc', '--depthfchosen', help="Uses the depth first chosen algorithm.", action="store_true")
 parser.add_argument('-r', '--random', help="Uses the random algorithm.", action="store_true")
 
-
+#choose experiment.
+parser.add_argument()
 #choose the iteration amount.
 parser.add_argument('iteration', help='amount of iterations used for the chosen algorithm', nargs='?', default=1000, type=int)
 
