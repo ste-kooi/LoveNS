@@ -72,4 +72,5 @@ class Baseline:
                 bbox=dict(boxstyle='round,pad=0.5', edgecolor='gray', facecolor='white'))
 
         # save the plot
-        plt.savefig('output/baseline_distribution.png')
+        plt.savefig(f'output/data/baseline_{self.model.mapname}_{self.iterations}.png')
+        print(f'Data written to output/data/baseline_{self.model.mapname}_{self.iterations}')
