@@ -151,12 +151,12 @@ A normal hillclimber randomly picks between the adjustment using even ratios. Th
 
 ### Experiments
 **Baseline - random algorithm**    
-bla die bla   
+Baseline generates random models for either region for a given amount of iterations and plots the frequency distribution of the scores of the model.    
 
 <u>Command lines</u>
 
- - bla die bla
- - bla die bla
+ - **-bl** **--baseline**
+ - **iterations** : runs the baseline algorithm for the given iterations, default set to 1000
 
 **Depth First experiments**     
 All DF experiment data can be found in output/data/df.     
