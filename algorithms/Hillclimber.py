@@ -74,8 +74,6 @@ class HillClimber:
         """
         Randomly removes some stations from the end of two routes and extends the first route.
         """
-        if len(new_model.routes) < 2:
-            return
         random_route_id = random.choice(list(new_model.routes))
         for _ in range(random.randint(1, 4)):
             new_model.get_route(random_route_id).remove_last_station()
@@ -95,8 +93,6 @@ class HillClimber:
         """
         Deletes two random routes and creates a new route starting from an unused connection.
         """
-        if len(new_model.routes) < 2:
-            return
         route_1, route_2 = random.sample(list(new_model.routes), 2)
         new_model.remove_route(route_1)
         new_model.remove_route(route_2)
