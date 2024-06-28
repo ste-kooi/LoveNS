@@ -71,7 +71,7 @@ def main():
         if args.frequencies:
             freq = args.frequencies
         else:
-            [1,1,1,1]
+            freq = [1,1,1,1]
 
         random_routes(model, model.max_routes)
 
